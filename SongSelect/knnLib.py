@@ -28,5 +28,4 @@ for i in outputCheck:
         correct+=1
     idx+=1
 
-print(prediction)
 print('Percentage correct predictions: ' + str(correct*100//idx) + '%')

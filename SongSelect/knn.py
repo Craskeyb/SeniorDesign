@@ -62,7 +62,7 @@ def knnPrediction(trainedData, testData, k):
 data = pd.read_csv('Datasets\IRIS.csv')
 
 #Reading in the data we want to predict from
-inputData = pd.read_csv('Datasets\IRIS.csv')
+inputData = pd.read_csv('Datasets\IRIStest.csv')
 
 outputCheck = inputData['species']
 cleanInput = inputData.loc[:,~data.columns.isin(['species'])]
@@ -72,7 +72,7 @@ k = 3
 correctCount = 0
 for i in range(len(cleanInput)):
     testOutput = knnPrediction(data,cleanInput.iloc[i],k)
-    print("The prediction for row " + str(i) + " of the test data is classified as: " + testOutput)
+    #print("The prediction for row " + str(i) + " of the test data is classified as: " + testOutput)
     if(testOutput == outputCheck[i]):
         correctCount += 1
     
