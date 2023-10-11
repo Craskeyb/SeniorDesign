@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import pandas as pd
+import random
 
 
 #Function for calculating distance using various strategies
@@ -33,8 +34,8 @@ def distance(trained, test, style) -> float:
 
     return dist
 
-#Function for getting the k nearest neighbors based on the test data
-def knnPrediction(trainedData, testData, k):
+#Function for getting the k nearest neighbors based on the test data, default use is classification.
+def knnPrediction(trainedData, testData, k, mode):
     
     neigh = {}
     for row in trainedData.iterrows():
@@ -51,8 +52,12 @@ def knnPrediction(trainedData, testData, k):
         else:
             break
     
-    classifiers = [label['species'] for label in kClosest]
-    prediction = max(set(classifiers), key=classifiers.count)
+    
+    if mode == "class":
+        classifiers = [label['species'] for label in kClosest]
+        prediction = max(set(classifiers), key=classifiers.count)
+    elif mode == "reg":
+        prediction = math.mean(kClosest)
 
     return prediction
                     
@@ -62,7 +67,7 @@ def knnPrediction(trainedData, testData, k):
 data = pd.read_csv('Datasets\IRIS.csv')
 
 #Reading in the data we want to predict from
-inputData = pd.read_csv('Datasets\IRIStest.csv')
+inputData = pd.read_csv('Datasets\IRIS.csv')
 
 outputCheck = inputData['species']
 cleanInput = inputData.loc[:,~data.columns.isin(['species'])]
@@ -70,10 +75,17 @@ cleanInput = inputData.loc[:,~data.columns.isin(['species'])]
 #Number of neighbors we want to check for our prediction
 k = 3
 correctCount = 0
-for i in range(len(cleanInput)):
-    testOutput = knnPrediction(data,cleanInput.iloc[i],k)
-    #print("The prediction for row " + str(i) + " of the test data is classified as: " + testOutput)
-    if(testOutput == outputCheck[i]):
+
+testArr = []
+while len(testArr) < 15:
+    num = random.randint(0,len(cleanInput)-1)
+    if num not in testArr:
+        testArr.append(num)
+
+for i in range(len(testArr)):
+    testOutput = knnPrediction(data,cleanInput.iloc[testArr[i]],k,"class")
+    print("The prediction for row " + str(testArr[i]) + " of the test data is classified as: " + testOutput)
+    if(testOutput == outputCheck[testArr[i]]):
         correctCount += 1
     
-print("\n\nThe percentage of correct predictions is " + str(correctCount*100//len(cleanInput)) + "%")
+print("\n\nThe percentage of correct predictions is " + str(correctCount*100//len(testArr)) + "%")
