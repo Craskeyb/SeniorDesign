@@ -20,7 +20,7 @@ class FaceCount:
 
         face_image = self.draw_faces(faces, img)
 
-        cv2.imshow("Detected Faces", face_image)
+        # cv2.imshow("Detected Faces", face_image)
 
         end = time.time()
 
