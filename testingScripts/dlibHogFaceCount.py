@@ -32,7 +32,7 @@ for face in faces:
     print(x1, y1, x2, y2)
     roi = original_img[y1_scaled:y2_scaled, x1_scaled:x2_scaled]
 
-    fname = "frame" + str(i) + ".jpg"
+    fname = "output\\frame" + str(i) + ".jpg"
 
     cv2.imshow(fname, roi)
     cv2.imwrite(fname, roi)

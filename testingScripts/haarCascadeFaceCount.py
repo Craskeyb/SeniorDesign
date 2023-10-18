@@ -5,7 +5,7 @@ import time
 scale_factor = 4
 
 start = time.time()
-original_img = cv2.imread("groupImage7.jpg")
+original_img = cv2.imread("groupImage2.jpg")
 
 img = cv2.resize(original_img, (int((original_img.shape[1]*(1/scale_factor))), int(original_img.shape[0]*(1/scale_factor)))) 
 
@@ -31,7 +31,7 @@ for face in faces:
     print(x1, y1, x2, y2)
     roi = original_img[y1_scaled:y2_scaled, x1_scaled:x2_scaled]
 
-    fname = "frame" + str(i) + ".jpg"
+    fname = "output\\frame" + str(i) + ".jpg"
 
     cv2.imshow(fname, roi)
     cv2.imwrite(fname, roi)
