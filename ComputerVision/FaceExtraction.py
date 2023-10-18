@@ -1,5 +1,7 @@
 import cv2
 import time
+import shutil
+import os
 
 class FaceExtraction:
     def __init__(self):
@@ -26,6 +28,8 @@ class FaceExtraction:
         return len(faces)
 
     def save_faces(self, faces, image):
+        self.clear_output_folder()
+
         for i, face in enumerate(faces):
             x1 = face[0]
             y1 = face[1]
@@ -42,3 +46,10 @@ class FaceExtraction:
             fname = "faces\\face" + str(i) + ".jpg"
 
             cv2.imwrite(fname, extracted_face)
+
+    def clear_output_folder(self):
+        try:
+            shutil.rmtree('faces')
+            os.makedirs('faces')
+        except Exception as e:
+            print("Error: ", e)
