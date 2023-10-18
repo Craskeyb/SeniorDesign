@@ -42,6 +42,7 @@ class FaceExtraction:
             y2_scaled = y2 * self.scale_factor
 
             extracted_face = image[y1_scaled:y2_scaled, x1_scaled:x2_scaled]
+            extracted_face = cv2.resize(extracted_face, (50,50))
 
             fname = "faces\\face" + str(i) + ".jpg"
 
