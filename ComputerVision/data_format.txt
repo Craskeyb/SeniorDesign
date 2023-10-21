@@ -1,0 +1,16 @@
+{
+  "count": 15,
+  "emotions": {
+    "angry": 0,
+    "disgust": 0,
+    "fear": 0,
+    "happy": 2,
+    "neutral": 1,
+    "sad":   4,
+    "surprise": 8
+  },
+  "data": {
+    "temperature": 20.1,
+    "light": 200
+  }
+}

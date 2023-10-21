@@ -13,12 +13,41 @@ class ComputerVision:
         count = self.face_count.get_face_count(image)
 
         print(count, " faces detected")
+        return count
     
     def extract_faces(self, image):
         count = self.face_extraction.extract_faces(image)
 
         print(count, " faces extracted")
 
+    def get_emotion(self):
+        # TODO: Get inferences on each face from trained CNN
+        return {"happy": 1}
+    
+    def get_image(self):
+        # TODO: Get image from Raspberry Pi
+        img = 'groupImage2.jpg'
+        return img
+    
+    def get_pi_data(self):
+        # TODO: Get data from Raspberry Pi
+        return {"light": 200, "temperature": 20.1}
+
+    def get_data(self): 
+        data = {}
+
+        image   = self.get_image()
+        pi_data = self.get_pi_data()
+
+        face_count = self.get_face_count(image)
+
+        self.extract_faces(image)
+
+        emotions = self.get_emotion()
+
+        data['count']   = face_count
+        data['emotion'] = emotions
+        data['data']    = pi_data
 
 if __name__ == "__main__":
     computer_vision = ComputerVision()
