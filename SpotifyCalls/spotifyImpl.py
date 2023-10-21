@@ -20,16 +20,20 @@ for idx, item in enumerate(results['items']):
     tracklist.append(track)
 
 
-for i in range(10,15):
+for i in range(20,25):
     sp.add_to_queue(tracklist[i]['uri'])
     print(str(tracklist[i]['name'])+" has been added to the queue")
 
 track = sp.currently_playing()
 
-if track['item']['name'] != tracklist[10]['name']:
-    sp.next_track()
+print('Skipping to track: ' + tracklist[23]['name'])
+while track['item']['name'] != tracklist[23]['name']:
     track = sp.currently_playing()
+    print("Current playing: " + track['item']['name'])
+    if track['item']['name'] == tracklist[23]['name']:
+        break
     time.sleep(2)
+    sp.next_track()
 
 #Extracting artists, track names, and genres from the api response to seed the recommendation generator
 # recArtists = []
@@ -61,5 +65,4 @@ if track['item']['name'] != tracklist[10]['name']:
 #     artists = track['artists']
 #     trackname = track['name']
 
-#     print(str(trackname) + " - " + artists)
-    
+#     print(str(trackname) + " - " + artists)    
