@@ -3,6 +3,7 @@ import FaceExtraction
 import cv2
 import sys
 import os
+import pandas as pd
 
 class ComputerVision:
     def __init__(self):
@@ -22,7 +23,7 @@ class ComputerVision:
 
     def get_emotion(self):
         # TODO: Get inferences on each face from trained CNN
-        return {"happy": 1}
+        return "happy"
     
     def get_image(self):
         # TODO: Get image from Raspberry Pi
@@ -36,18 +37,24 @@ class ComputerVision:
     def get_data(self): 
         data = {}
 
-        image   = self.get_image()
-        pi_data = self.get_pi_data()
+        # image   = self.get_image()
+        # pi_data = self.get_pi_data()
 
-        face_count = self.get_face_count(image)
+        # face_count = self.get_face_count(image)
 
-        self.extract_faces(image)
+        # self.extract_faces(image)
 
-        emotions = self.get_emotion()
+        # emotions = self.get_emotion()
+
+        face_count = 0 
+        emotions = "happy"
+        pi_data = {"light": 200, "temperature": 20.1}
 
         data['count']   = face_count
         data['emotion'] = emotions
-        data['data']    = pi_data
+        data.update(pi_data)
+        return pd.DataFrame([data])
+
 
 if __name__ == "__main__":
     computer_vision = ComputerVision()
@@ -63,3 +70,4 @@ if __name__ == "__main__":
 
         computer_vision.get_face_count(image)
         computer_vision.extract_faces(image)
+        print(computer_vision.get_data())
