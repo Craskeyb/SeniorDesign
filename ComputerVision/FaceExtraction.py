@@ -14,7 +14,6 @@ class FaceExtraction:
         original_img = cv2.imread(image)
 
         img = cv2.resize(original_img, (int((original_img.shape[1]*(1/self.scale_factor))), int(original_img.shape[0]*(1/self.scale_factor)))) 
-
         im = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         faces = self.face_cascade.detectMultiScale(im, 1.1, 9)
@@ -42,7 +41,8 @@ class FaceExtraction:
             y2_scaled = y2 * self.scale_factor
 
             extracted_face = image[y1_scaled:y2_scaled, x1_scaled:x2_scaled]
-            extracted_face = cv2.resize(extracted_face, (50,50))
+            extracted_face = cv2.resize(extracted_face, (48,48))
+            extracted_face = cv2.cvtColor(extracted_face, cv2.COLOR_BGR2GRAY)
 
             fname = "faces\\face" + str(i) + ".jpg"
 

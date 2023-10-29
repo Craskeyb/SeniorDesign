@@ -1,5 +1,6 @@
 import FaceCount
 import FaceExtraction
+import EmotionDetection
 import cv2
 import sys
 import os
@@ -9,6 +10,7 @@ class ComputerVision:
     def __init__(self):
         self.face_count = FaceCount.FaceCount()
         self.face_extraction = FaceExtraction.FaceExtraction()
+        self.emotion_detection = EmotionDetection.EmotionDetection()
     
     def get_face_count(self, image):
         count = self.face_count.get_face_count(image)
@@ -23,6 +25,8 @@ class ComputerVision:
 
     def get_emotion(self):
         # TODO: Get inferences on each face from trained CNN
+        emotions = self.emotion_detection.classify()
+        print("Emotions: ", emotions)
         return "happy"
     
     def get_image(self):
@@ -70,4 +74,5 @@ if __name__ == "__main__":
 
         computer_vision.get_face_count(image)
         computer_vision.extract_faces(image)
+        computer_vision.get_emotion()
         print(computer_vision.get_data())
