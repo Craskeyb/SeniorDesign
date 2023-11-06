@@ -35,6 +35,11 @@ print(class_names)
 # plt.show()
 
 print("Building model...")
+AUTOTUNE = tf.data.AUTOTUNE
+
+train_ds = train_ds.cache().shuffle(500).prefetch(buffer_size=AUTOTUNE)
+val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+print("Building model...")
 
 data_augmentation = keras.Sequential(
   [
@@ -48,22 +53,23 @@ model = keras.Sequential([
   data_augmentation,
   keras.layers.Rescaling(1./255),
 
-  keras.layers.Conv2D(64, 3, activation='relu'),
+  keras.layers.Conv2D(32, 3, activation='relu'),
+  keras.layers.BatchNormalization(),
   keras.layers.MaxPooling2D(),
+  keras.layers.Dropout(0.4),
+
+  keras.layers.Conv2D(64, 3, activation='relu'),
+  keras.layers.BatchNormalization(),
+  keras.layers.MaxPooling2D(),
+  keras.layers.Dropout(0.4),
 
   keras.layers.Conv2D(128, 3, activation='relu'),
+  keras.layers.BatchNormalization(),
   keras.layers.MaxPooling2D(),
-
-  keras.layers.Conv2D(256, 3, activation='relu'),
-  keras.layers.MaxPooling2D(),
-  keras.layers.Dropout(0.2),
-
-  keras.layers.Conv2D(512, 3, activation='relu'),
-  keras.layers.MaxPooling2D(),
-  keras.layers.Dropout(0.2),
+  keras.layers.Dropout(0.4),
 
   keras.layers.Flatten(),
-  keras.layers.Dense(32, activation='relu'),
+  keras.layers.Dense(256, activation='relu'),
   keras.layers.Dense(num_classes)
 ])
 
@@ -83,7 +89,7 @@ history = model.fit(
   epochs=40
 )
 
-model.save('emotion_recognition_model_5.keras')
+model.save('emotion_recognition_model_12.keras')
 
 end = time.time()
 

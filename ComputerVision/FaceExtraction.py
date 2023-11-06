@@ -6,7 +6,7 @@ import os
 class FaceExtraction:
     def __init__(self):
         self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
-        self.scale_factor = 4
+        self.scale_factor = 1
     
     def extract_faces(self, image):
         start = time.time()
@@ -41,7 +41,7 @@ class FaceExtraction:
             y2_scaled = y2 * self.scale_factor
 
             extracted_face = image[y1_scaled:y2_scaled, x1_scaled:x2_scaled]
-            extracted_face = cv2.resize(extracted_face, (48,48))
+            extracted_face = cv2.resize(extracted_face, (100,100))
             extracted_face = cv2.cvtColor(extracted_face, cv2.COLOR_BGR2GRAY)
 
             fname = "faces\\face" + str(i) + ".jpg"
