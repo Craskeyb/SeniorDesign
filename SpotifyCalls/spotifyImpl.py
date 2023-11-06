@@ -1,10 +1,8 @@
 import spotipy
 import credentials as cred
 from spotipy.oauth2 import SpotifyOAuth
+import json
 import time
-
-#Scope for actual implementation of playback control
-#scope = ["user-read-playback-state","user-modify-playback-state"]
 
 #Scope for testing purposes of API calls and rate limit testing
 scope = ["user-read-recently-played","user-modify-playback-state","user-read-currently-playing"]
@@ -19,50 +17,34 @@ for idx, item in enumerate(results['items']):
     track = item['track']
     tracklist.append(track)
 
-
-for i in range(20,25):
-    sp.add_to_queue(tracklist[i]['uri'])
-    print(str(tracklist[i]['name'])+" has been added to the queue")
+# Adding sample tracks to queue
+# for i in range(20,25):
+#     sp.add_to_queue(tracklist[i]['uri'])
+#     print(str(tracklist[i]['name'])+" has been added to the queue")
 
 track = sp.currently_playing()
 
-print('Skipping to track: ' + tracklist[23]['name'])
-while track['item']['name'] != tracklist[23]['name']:
-    track = sp.currently_playing()
-    print("Current playing: " + track['item']['name'])
-    if track['item']['name'] == tracklist[23]['name']:
-        break
-    time.sleep(2)
-    sp.next_track()
-
-#Extracting artists, track names, and genres from the api response to seed the recommendation generator
-# recArtists = []
-# recTracks = []
-# recGenres = ['classical','hip-hop','r&b','rap']
-# for i in range(10,19):
-#     if tracklist[i]['uri'] not in recTracks:
-#         recTracks.append(tracklist[i]['uri'])
-#     if tracklist[i]['artists'] not in recArtists:
-#         recArtists.append(tracklist[i]['artists'])
-
-# artistsURI = []
-# for artist in recArtists:
-#     if artist[0]['uri'] not in artistsURI:
-#         artistsURI.append(artist[0]['uri'])
+# Code to test playback control
+# print('Skipping to track: ' + tracklist[23]['name'])
+# while track['item']['name'] != tracklist[23]['name']:
+#     track = sp.currently_playing()
+#     print("Current playing: " + track['item']['name'])
+#     if track['item']['name'] == tracklist[23]['name']:
+#         break
+#     time.sleep(2)
+#     sp.next_track()
 
 
-# sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cred.CLIENT_ID, client_secret=cred.CLIENT_SECRET, redirect_uri=cred.REDIRECT_URI,scope=scope))  
+recGenres = ['classical','pop','rock']
+recs = sp.recommendations(seed_genres=recGenres, limit=3)
+data = json.dumps(recs,indent=2)
+print(data)
+print("\n\nRecommendations"+
+        "\n-----------------------------------------------")
+#Displaying the recommendations that were generated
+recTracklist = []
+for i in recs["tracks"]:
+    artists = i['artists'][0]['name']
+    track = i['name']
 
-# recs = sp.recommendations(seed_tracks=recTracks[0],seed_genres=recGenres,seed_artists=artistsURI[0], limit=10)
-
-# print("\n\nRecommendations based on 10 of your top tracks"+
-#         "\n-----------------------------------------------")
-# #Displaying the recommendations that were generated
-# recTracklist = []
-# for idx,item in enumerate(recs['items']):
-#     track = item['track']
-    
-#     artists = track['artists']
-#     trackname = track['name']
-
-#     print(str(trackname) + " - " + artists)    
+    print(artists + " - " + track)    
