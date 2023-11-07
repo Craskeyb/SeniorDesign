@@ -50,7 +50,7 @@ light_values = [random.randint(30, 220) for _ in range(700)]
 # Create and populate the CSV file
 with open('Datasets\\testData.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(['count', 'angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral', 'temperature', 'light', 'genre'])
+    writer.writerow(['count', 'angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise', 'temperature', 'light', 'genre'])
     for _ in range(700):
         emote = random.choice(emotion_values)
         emoteBool = [0]*7

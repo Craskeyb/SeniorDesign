@@ -1,7 +1,6 @@
 # Song Selection ML Algorithm #
 
 import pandas as pd
-#import numpy as np
 import random
 from sklearn.metrics import confusion_matrix 
 from sklearn.model_selection import train_test_split 
@@ -9,7 +8,6 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
 from sklearn.metrics import accuracy_score 
 import matplotlib.pyplot as plt
-#from sklearn.metrics import classification_report
 
 def entropyTrain(input, output):
     #Implement fitting data to model using entropy as primary training criterion
@@ -43,8 +41,6 @@ def prediction(testData, decTree):
     # plt.show()
 
     pred = decTree.predict(testData)
-    #print("Classifier Prediction: ")
-    #print(pred)
      
     return pred
 

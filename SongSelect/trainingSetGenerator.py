@@ -41,7 +41,7 @@ def genreChoice(count,emote,temp,light) -> str:
 
 # Define the possible values for each column
 count_values = list(range(1, 21))
-emotion_values = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
+emotion_values = ['angry', 'disgust', 'fear', 'happy', 'neutral','sad', 'surprise', 'neutral']
 emotion_count = [0]*7
 temperature_values = [round(random.uniform(20, 25), 2) for _ in range(700)]
 light_values = [random.randint(30, 200) for _ in range(550)] + [random.randint(196, 220) for _ in range(150)]
@@ -50,7 +50,7 @@ light_values = [random.randint(30, 200) for _ in range(550)] + [random.randint(1
 # Create and populate the CSV file
 with open('Datasets\\trainingData.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
-    writer.writerow(['count', 'angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral', 'temperature', 'light', 'genre'])
+    writer.writerow(['count', 'angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise', 'temperature', 'light', 'genre'])
     for _ in range(700):
         emote = random.choice(emotion_values)
         emoteBool = [0]*7
