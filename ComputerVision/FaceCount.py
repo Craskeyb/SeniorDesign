@@ -1,6 +1,8 @@
 import cv2
 import time
 import face_detection
+import shutil
+import os
 
 class FaceCount:
 
@@ -19,6 +21,7 @@ class FaceCount:
         faces = self.detector.detect(im)
 
         face_image = self.draw_faces(faces, img)
+        self.save_faces(faces, original_img)
 
         # cv2.imshow("Detected Faces", face_image)
 
@@ -39,3 +42,32 @@ class FaceCount:
                 cv2.rectangle(image, (x1, y1), (x2, y2), (0, 255, 0), 2)
 
         return image
+    
+    def save_faces(self, faces, image):
+        self.clear_output_folder()
+
+        for i, face in enumerate(faces):
+            x1 = int(face.item(0))
+            y1 = int(face.item(1))
+            x2 = int(face.item(2))
+            y2 = int(face.item(3))
+
+            x1_scaled = x1 * self.scale_factor
+            x2_scaled = x2 * self.scale_factor
+            y1_scaled = y1 * self.scale_factor
+            y2_scaled = y2 * self.scale_factor
+
+            extracted_face = image[y1_scaled:y2_scaled, x1_scaled:x2_scaled]
+            # extracted_face = cv2.resize(extracted_face, (100,100))
+            extracted_face = cv2.cvtColor(extracted_face, cv2.COLOR_BGR2GRAY)
+
+            fname = "faces\\face" + str(i) + ".jpg"
+
+            cv2.imwrite(fname, extracted_face)
+
+    def clear_output_folder(self):
+        try:
+            shutil.rmtree('faces')
+            os.makedirs('faces')
+        except Exception as e:
+            print("Error: ", e)
