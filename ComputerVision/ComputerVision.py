@@ -177,7 +177,7 @@ class ComputerVision:
         light       = (light1 + light2)/2
 
         # Calculate the motion using the two images received
-        motion = computer_vision.get_motion()
+        # TODO : Uncomment this # motion = computer_vision.get_motion()
 
         pi_data = {"temperature": temperature, "light": light}
 
