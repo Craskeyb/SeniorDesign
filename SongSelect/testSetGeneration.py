@@ -30,7 +30,7 @@ def genreChoice(count,emote,temp,light) -> str:
             return 'rock'
     elif emote == 'happy':
         if light < 196 and count > 10:
-            return 'disco'
+            return 'electronic'
         else:
             return 'pop'
     else:
@@ -41,9 +41,9 @@ def genreChoice(count,emote,temp,light) -> str:
 
 # Define the possible values for each column
 count_values = list(range(1, 21))
-emotion_values = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
+emotion_values = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
 emotion_count = [0]*7
-temperature_values = [round(random.uniform(18, 30), 2) for _ in range(700)]
+temperature_values = [round(random.uniform(17, 30), 2) for _ in range(700)]
 light_values = [random.randint(30, 220) for _ in range(700)]
 
 
@@ -66,10 +66,10 @@ with open('Datasets\\testData.csv', mode='w', newline='') as file:
         elif emote == 'happy':
             emotion_count[3]+=1
             emoteBool[3] = 1
-        elif emote == 'sad':
+        elif emote == 'neutral':
             emotion_count[4]+=1
             emoteBool[4] = 1
-        elif emote == 'surprise':
+        elif emote == 'sad':
             emotion_count[5]+=1
             emoteBool[5] = 1
         else:
