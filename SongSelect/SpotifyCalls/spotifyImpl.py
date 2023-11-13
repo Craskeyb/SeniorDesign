@@ -1,5 +1,5 @@
 import spotipy
-import SpotifyCalls.credentials as cred
+import SongSelect.SpotifyCalls.credentials as cred
 from spotipy.oauth2 import SpotifyOAuth
 import json
 import time

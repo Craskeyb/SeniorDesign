@@ -5,7 +5,7 @@ import os
 
 class FaceExtraction:
     def __init__(self):
-        self.face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+        self.face_cascade = cv2.CascadeClassifier('ComputerVision\\haarcascade_frontalface_default.xml')
         self.scale_factor = 1
     
     def extract_faces(self, image):
@@ -44,13 +44,13 @@ class FaceExtraction:
             extracted_face = cv2.resize(extracted_face, (100,100))
             extracted_face = cv2.cvtColor(extracted_face, cv2.COLOR_BGR2GRAY)
 
-            fname = "faces\\face" + str(i) + ".jpg"
+            fname = "ComputerVision\\faces\\face" + str(i) + ".jpg"
 
             cv2.imwrite(fname, extracted_face)
 
     def clear_output_folder(self):
         try:
-            shutil.rmtree('faces')
-            os.makedirs('faces')
+            shutil.rmtree('ComputerVision\\faces')
+            os.makedirs('ComputerVision\\faces')
         except Exception as e:
             print("Error: ", e)

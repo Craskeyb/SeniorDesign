@@ -7,7 +7,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
 from sklearn.metrics import accuracy_score 
 import matplotlib.pyplot as plt
-import predictionEval
+from SongSelect import predictionEval
 
 class decTree:
     def __init__(self):

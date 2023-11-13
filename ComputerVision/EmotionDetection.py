@@ -7,7 +7,7 @@ import cv2
 
 class EmotionDetection():
     def __init__(self):
-        self.model = tf.keras.models.load_model('emotion_recognition_model_5.keras')
+        self.model = tf.keras.models.load_model('ComputerVision\\emotion_recognition_model_5.keras')
         self.class_names =  ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
         pass
     
@@ -15,9 +15,9 @@ class EmotionDetection():
         emotions = {}
         emotions = dict.fromkeys(self.class_names, None)
         
-        for images in os.listdir('faces'):
-            oimg = cv2.imread('faces\\' + images)
-            img = tf.keras.utils.load_img('faces\\'+images, target_size=(48, 48))
+        for images in os.listdir('ComputerVision\\faces'):
+            oimg = cv2.imread('ComputerVision\\faces\\' + images)
+            img = tf.keras.utils.load_img('ComputerVision\\faces\\'+images, target_size=(48, 48))
             img_array = tf.keras.utils.img_to_array(img)
             img_array = tf.expand_dims(img_array, 0)
 

@@ -1,7 +1,8 @@
-import FaceCount
-import FaceExtraction
-import EmotionDetection
-import MotionDetection
+# import FaceCount
+from ComputerVision import FaceCount, FaceExtraction, MotionDetection, EmotionDetection
+# import FaceExtraction
+# import EmotionDetection
+# import MotionDetection
 import cv2
 import sys
 import os
@@ -122,14 +123,14 @@ class ComputerVision:
         # Close the connection
         s.close()
 
-        return (light_val, temp_val)
+        return (temp_val, light_val)
 
     """
     Takes an image using the webcam. Used for testing purposes in place of the raspberry pi
     """
     def get_webcam_image(self):
         ret, frame = self.cap.read()
-        cv2.imwrite('received_image.jpg', frame)
+        cv2.imwrite('ComputerVision\\received_image.jpg', frame)
 
     """
     Gets motion using MotionDetection module
@@ -153,26 +154,27 @@ class ComputerVision:
 
         try:
             # Get first image and measurements
-            (temp1, light1) = computer_vision.get_pi_data('received_image.jpg')
+            (temp1, light1) = self.get_pi_data('ComputerVision\\received_image.jpg')
             #computer_vision.get_webcam_image()
         except:
             print("Error: Error occured while retrieving Raspberry Pi Data")
             return
 
         # Get count of faces
-        count = computer_vision.get_face_count('received_image.jpg')
+        count = self.get_face_count('ComputerVision\\received_image.jpg')
 
         # ! This mightExtract faces from image
-        computer_vision.extract_faces('received_image.jpg')
+        self.extract_faces('ComputerVision\\received_image.jpg')
 
         # Get emotions of extracted faces
-        emotions = computer_vision.get_emotion()
+        emotions = self.get_emotion()
 
         # Normalize emotions dict to follow standard
-        emotions = computer_vision.norm_emotions(emotions)
+        emotions = self.norm_emotions(emotions)
+
 
         # Get second image and measurements
-        (temp2, light2) = computer_vision.get_pi_data('received_image1.jpg')  
+        (temp2, light2) = self.get_pi_data('ComputerVision\\received_image1.jpg')  
 
         # Calculate average of pi sensor data
         temperature = (temp1 + temp2)/2
@@ -180,6 +182,8 @@ class ComputerVision:
 
         # Calculate the motion using the two images received
         # TODO : Uncomment this # motion = computer_vision.get_motion()
+        motion = self.get_motion()
+        print(motion)
 
         pi_data = {"temperature": temperature, "light": light}
 
@@ -228,15 +232,15 @@ class ComputerVision:
 
 
 # ! COMMENT THIS OUT IF IMPORTING. Used for testing module without Music Selection Algorithm
-if __name__ == "__main__":
-    computer_vision = ComputerVision()
+# if __name__ == "__main__":
+#     computer_vision = ComputerVision()
 
-    while(True):
-        print('--------------------------------------------------')
-        cmd = input('Press enter to process or type \'exit\' to end: ')
-        if cmd == 'exit':
-            computer_vision.cap.release()
-            sys.exit()
+#     while(True):
+#         print('--------------------------------------------------')
+#         cmd = input('Press enter to process or type \'exit\' to end: ')
+#         if cmd == 'exit':
+#             computer_vision.cap.release()
+#             sys.exit()
 
-        print(computer_vision.get_data())
+#         print(computer_vision.get_data())
     

@@ -3,3 +3,6 @@
 /ComputerVision/__pycache__/
 /ComputerVision/faces/
 /ComputerVision/fer-2013
+/SongSelect/__pycache__/
+/SongSelect/SpotifyCalls/__pycache__/
+/SongSelect/SpotifyCalls/credentials.py
