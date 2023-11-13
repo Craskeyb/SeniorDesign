@@ -9,6 +9,8 @@ import pandas as pd
 import socket
 import json
 import base64
+
+
 class ComputerVision:
     """
     Constructor to initialize submodules and set config values
@@ -161,7 +163,7 @@ class ComputerVision:
         count = computer_vision.get_face_count('received_image.jpg')
 
         # ! This mightExtract faces from image
-        # computer_vision.extract_faces('received_image.jpg')
+        computer_vision.extract_faces('received_image.jpg')
 
         # Get emotions of extracted faces
         emotions = computer_vision.get_emotion()
@@ -187,15 +189,15 @@ class ComputerVision:
         return pd.DataFrame([data])
     
     """
-    Normalizes the emotions dictionary by converting any None values to 0, finding the maximum occurring emotion, 
-    and setting its value to 1 while setting all other emotions to 0. If no faces are found, the function defaults 
-    to setting the neutral emotion to 1 and all other emotions to 0.
+    Normalizes the emotions dictionary by converting any None values to 0, finding the max occurring emotion, 
+    and setting its value to 1 while setting all other emotions to 0. If no faces are found, default
+    to neutral emotion.
 
     Args:
         emotions (dict): A dictionary containing the emotions and their corresponding values.
 
     Returns:
-        dict: A dictionary containing the normalized emotions with the maximum occurring emotion set to 1 and all 
+        dict: A dictionary containing the normalized emotions with the max occurring emotion set to 1 and all 
         other emotions set to 0.
     """
     def norm_emotions(self, emotions):

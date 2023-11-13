@@ -21,7 +21,7 @@ class FaceCount:
         faces = self.detector.detect(im)
 
         face_image = self.draw_faces(faces, img)
-        self.save_faces(faces, original_img)
+        # self.save_faces(faces, original_img)
 
         # cv2.imshow("Detected Faces", face_image)
 
