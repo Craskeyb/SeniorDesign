@@ -1,4 +1,5 @@
 from decTree import decTree
+from SpotifyCalls.spotifyImpl import RecGenerator
 
 def liveAiDj():
     #Instantiate a new decision tree object
@@ -12,7 +13,10 @@ def liveAiDj():
     print("\nGini prediction for input data: " + prediction)
 
     #Evaluate the prediction using the methods found in predictionEval.py
-    decisionTree.evaluatePrediction([[10,0,0,0,1,0,0,0,20.11,120]], prediction)
+    decisionTree.evaluatePrediction([10,0,0,0,1,0,0,0,20.11,120], prediction)
+
+    #Instantiate the Spotify API Application
+    songRecs = RecGenerator()
 
 
 if __name__ == "__main__":
