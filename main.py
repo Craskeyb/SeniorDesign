@@ -26,6 +26,7 @@ def liveAiDj():
 
     #Instantiate the Spotify API Application
     songRecs = RecGenerator()
+    songRecs.makeRecommendation(prediction)
 
 
 if __name__ == "__main__":
