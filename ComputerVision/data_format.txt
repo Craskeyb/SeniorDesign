@@ -1,0 +1,8 @@
+{
+  "count": 15,
+  "emotion": "happy",
+  "data": {
+    "temperature": 20.1,
+    "light": 200
+  }
+}
