@@ -1,2 +1,2 @@
 # SeniorDesign
-Senior Design project for Brett Craskey, Hudson Panning, Nick D'Arcy, and Jon Hallowell
+Senior Design project for Brett Craskey, Hudson Panning, and Nick D'Arcy
