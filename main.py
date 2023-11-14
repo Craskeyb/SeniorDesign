@@ -41,5 +41,6 @@ if __name__ == "__main__":
         cmd = input('Press enter to process or type \'exit\' to end: ')
         if cmd == 'exit':
             sys.exit()
-            liveAiDj()
+    
+    liveAiDj()
     #testSynthetic()
