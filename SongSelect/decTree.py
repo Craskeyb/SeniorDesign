@@ -7,6 +7,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn import tree
 from sklearn.metrics import accuracy_score 
 import matplotlib.pyplot as plt
+import statistics
 from SongSelect import predictionEval
 
 class decTree:
@@ -68,34 +69,28 @@ class decTree:
             outputCheck.append(testData.iloc[num]['genre'])
 
 
-        entropyPred = self.prediction(testArr, self.entropyModel)
+        #entropyPred = self.prediction(testArr, self.entropyModel)
         giniPred = self.prediction(testArr, self.giniModel)
 
-        entropyAcc = accuracy_score(entropyPred, outputCheck)
+        #entropyAcc = accuracy_score(entropyPred, outputCheck)
         giniAcc = accuracy_score(giniPred, outputCheck)
 
-        print("\nEntropy Prediction Accuracy: " + str(entropyAcc*100//1) + "%")
+        #print("\nEntropy Prediction Accuracy: " + str(entropyAcc*100//1) + "%")
         print("Gini Prediction Accuracy: " + str(giniAcc*100//1) + "%")
 
-        entCheck = []
+        #entCheck = []
         giniCheck = []
         for val in testArr[0]:
-            entCheck.append(val)
+            #entCheck.append(val)
             giniCheck.append(val)
-        entEmotion, entInput = predictionEval.similarityScore(entCheck, entropyPred[0], self.inputData)
-        giniEmotion, giniInput = predictionEval.similarityScore(giniCheck, giniPred[0], self.inputData)
-        entScen = predictionEval.scenarioScore(entCheck, entropyPred[0])
-        giniScen = predictionEval.scenarioScore(giniCheck, giniPred[0])
+        
+        #print("\nEvaluating entropy predictions")
+        #self.evaluateSyntheticPredictions(testArr,entropyPred)
 
+        print("\nEvaluating gini predictions")
+        self.evaluateSyntheticPredictions(testArr,giniPred)
+        
 
-        print("\nEntropy emotion similarity: " + str(entEmotion*100//1) + "%")
-        print("Entropy input similarity: " + str(entInput*100//1) + "%")
-
-        print("\nGini emotion similarity: " + str(giniEmotion*100//1) + "%")
-        print("Gini input similarity: " + str(giniInput*100//1) + "%")
-
-        print("\nEntropy scenario score: " + str(entScen*100//1) + "%")
-        print("Gini scenario score: " + str(giniScen*100//1) + "%")
 
     #Function to make a prediction based on a decision tree model that is passed in
     #Version of function for internal use, requires input of decision tree object
@@ -126,6 +121,22 @@ class decTree:
 
         print("Scenario Score: " + str(scenarioScore*100//1) + "%")
 
+    #Function to perform the prediction evaluation for the whole set of test data (performs on every row, and averages the result)
+    def evaluateSyntheticPredictions(self, testData, prediction):
+        emotionArr = []
+        inputArr = []
+        scenarioArr = []
+        for i in range(len(prediction)):
+            emScore,inScore = predictionEval.similarityScore(testData[i],prediction[i],self.inputData)
+            emotionArr.append(emScore)
+            inputArr.append(inScore)
+            scenarioArr.append(predictionEval.scenarioScore(testData[i],prediction[i]))
+        
+        print("\nAverage values across all test predictions")
+        print("-------------------------------------------")
+        print("Average emotion similarity: " + str(statistics.mean(emotionArr)*100//1))
+        print("Average input similarity: " + str(statistics.mean(inputArr)*100//1))
+        print("Average scenario score: " + str(statistics.mean(scenarioArr)*100//1))
 
     #Function to generate and display a visualization of the tree, which includes the splitting criteria at each node
     def plotTree(self, decTree):

@@ -8,9 +8,6 @@ def liveAiDj():
     decisionTree = decTree()
     computer_vision = ComputerVision()
 
-    #Perform test of large synthetic data set utilizing randomly chosen input rows
-    #decisionTree.testSyntheticData()
-
     #Perform a prediction based on input data (hardcoded for now)
     data = computer_vision.get_data()
 
@@ -21,12 +18,20 @@ def liveAiDj():
     print("\nGini prediction for input data: " + prediction)
 
     #Evaluate the prediction using the methods found in predictionEval.py
-    # decisionTree.evaluatePrediction([10,0,0,0,1,0,0,0,20.11,120], prediction)
+    #decisionTree.evaluatePrediction([10,0,0,0,1,0,0,0,20.11,120], prediction)
     decisionTree.evaluatePrediction(data.iloc[0], prediction)
 
     #Instantiate the Spotify API Application
     songRecs = RecGenerator()
     songRecs.makeRecommendation(prediction)
+
+def testSynthetic():
+    #Instantiate a new decision tree object
+    decisionTree = decTree()
+
+    #Perform test of large synthetic data set utilizing randomly chosen input rows
+    decisionTree.testSyntheticData()
+
 
 
 if __name__ == "__main__":
@@ -36,5 +41,5 @@ if __name__ == "__main__":
         cmd = input('Press enter to process or type \'exit\' to end: ')
         if cmd == 'exit':
             sys.exit()
-
-        liveAiDj()
+            liveAiDj()
+    #testSynthetic()
