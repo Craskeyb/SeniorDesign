@@ -42,5 +42,5 @@ if __name__ == "__main__":
         if cmd == 'exit':
             sys.exit()
     
-    liveAiDj()
+        liveAiDj()
     #testSynthetic()

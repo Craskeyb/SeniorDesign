@@ -164,7 +164,7 @@ class ComputerVision:
         count = self.get_face_count('ComputerVision\\received_image.jpg')
 
         # ! This mightExtract faces from image
-        self.extract_faces('ComputerVision\\received_image.jpg')
+        # self.extract_faces('ComputerVision\\received_image.jpg')
 
         # Get emotions of extracted faces
         emotions = self.get_emotion()

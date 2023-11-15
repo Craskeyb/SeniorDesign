@@ -21,7 +21,7 @@ class FaceCount:
         faces = self.detector.detect(im)
 
         face_image = self.draw_faces(faces, img)
-        # self.save_faces(faces, original_img)
+        self.save_faces(faces, original_img)
 
         # cv2.imshow("Detected Faces", face_image)
 
@@ -61,13 +61,13 @@ class FaceCount:
             # extracted_face = cv2.resize(extracted_face, (100,100))
             extracted_face = cv2.cvtColor(extracted_face, cv2.COLOR_BGR2GRAY)
 
-            fname = "faces\\face" + str(i) + ".jpg"
+            fname = "ComputerVision\\faces\\face" + str(i) + ".jpg"
 
             cv2.imwrite(fname, extracted_face)
 
     def clear_output_folder(self):
         try:
-            shutil.rmtree('faces')
-            os.makedirs('faces')
+            shutil.rmtree('ComputerVision\\faces')
+            os.makedirs('ComputerVision\\faces')
         except Exception as e:
             print("Error: ", e)

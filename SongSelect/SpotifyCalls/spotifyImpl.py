@@ -16,6 +16,8 @@ class RecGenerator:
     #Recommendation Method
     def makeRecommendation(self, genre):
         recs = self.sp.recommendations(seed_genres=genre, limit=10)
+        available_genres = self.sp.recommendation_genre_seeds()
+        # print(available_genres)
         data = json.dumps(recs,indent=2)
         # print(data)
         print("\n\nRecommendations"+

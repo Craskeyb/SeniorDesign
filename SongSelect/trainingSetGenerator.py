@@ -17,7 +17,7 @@ def genreChoice(count,emote,temp,light) -> str:
         if light > 196:
             return 'classical'
         else:
-            return 'dark ambient'
+            return 'sad'
     elif emote == 'neutral':
         if count > 6:
             return 'jazz'
@@ -35,7 +35,7 @@ def genreChoice(count,emote,temp,light) -> str:
             return 'pop'
     else:
         if count < 10:
-            return 'dark ambient'
+            return 'sad'
         else:
             return 'rock'
 
@@ -48,7 +48,7 @@ light_values = [random.randint(30, 200) for _ in range(550)] + [random.randint(1
 
 
 # Create and populate the CSV file
-with open('Datasets\\trainingData.csv', mode='w', newline='') as file:
+with open('..\\Datasets\\trainingData.csv', mode='w', newline='') as file:
     writer = csv.writer(file)
     writer.writerow(['count', 'angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise', 'temperature', 'light', 'genre'])
     for _ in range(700):
