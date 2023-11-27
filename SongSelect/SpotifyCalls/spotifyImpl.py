@@ -12,6 +12,8 @@ class RecGenerator:
 
         self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cred.CLIENT_ID, client_secret=cred.CLIENT_SECRET, redirect_uri=cred.REDIRECT_URI,scope=scope))  
 
+        #Internal variable to keep track of the songs that have been played already to avoid repeats
+        self.played = []
 
     #Recommendation Method
     def makeRecommendation(self, genre):
@@ -27,6 +29,13 @@ class RecGenerator:
         ### USED FOR TESTING ###
         # data = json.dumps(recs,indent=2)
         # print(data)
+
+        #Getting the recommendations that match our tempo evaluation
+        songInfo = []
+        for song in recs["tracks"]:
+            songInfo.append(self.sp.audio_features(song["uri"])[0]["tempo"])
+
+        print(songInfo)
 
         print("\n\nRecommendations"+
                 "\n-----------------------------------------------")
