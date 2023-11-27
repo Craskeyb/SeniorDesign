@@ -3,44 +3,53 @@ from SongSelect.SpotifyCalls.spotifyImpl import RecGenerator
 from ComputerVision.ComputerVision import ComputerVision
 import sys
 
-def liveAiDj():
-    #Instantiate a new decision tree object
-    decisionTree = decTree()
-    computer_vision = ComputerVision()
+class AiDj():
+    def __init__(self):
+        print("******************************")
+        print("* Welcome to the Live AI DJ! *")
+        print("******************************\n")
+        print("Initializing components...")
+        self.decisionTree = decTree()
+        self.computer_vision = ComputerVision()
 
-    #Perform a prediction based on input data (hardcoded for now)
-    data = computer_vision.get_data()
+    def liveAiDj(self):
+        #Instantiate a new decision tree object
 
-    print(data)
+        #Perform a prediction based on input data (hardcoded for now)
+        data = self.computer_vision.get_data()
 
-    prediction = decisionTree.giniPrediction(data)
-    # prediction = decisionTree.giniPrediction([[10,0,0,0,1,0,0,0,20.11,120]])
-    print("\nGini prediction for input data: " + prediction)
+        print(data)
 
-    #Evaluate the prediction using the methods found in predictionEval.py
-    #decisionTree.evaluatePrediction([10,0,0,0,1,0,0,0,20.11,120], prediction)
-    decisionTree.evaluatePrediction(data.iloc[0], prediction)
+        prediction = self.decisionTree.giniPrediction(data)
+        # prediction = decisionTree.giniPrediction([[10,0,0,0,1,0,0,0,20.11,120]])
+        print("\nGini prediction for input data: " + prediction)
 
-    #Instantiate the Spotify API Application
-    songRecs = RecGenerator()
-    songRecs.makeRecommendation(prediction)
+        #Evaluate the prediction using the methods found in predictionEval.py
+        #decisionTree.evaluatePrediction([10,0,0,0,1,0,0,0,20.11,120], prediction)
+        self.decisionTree.evaluatePrediction(data.iloc[0], prediction)
 
-def testSynthetic():
-    #Instantiate a new decision tree object
-    decisionTree = decTree()
+        #Instantiate the Spotify API Application
+        songRecs = RecGenerator()
+        songRecs.makeRecommendation(prediction)
 
-    #Perform test of large synthetic data set utilizing randomly chosen input rows
-    decisionTree.testSyntheticData()
+    def testSynthetic(self):
+        #Instantiate a new decision tree object
+        decisionTree = decTree()
+
+        #Perform test of large synthetic data set utilizing randomly chosen input rows
+        decisionTree.testSyntheticData()
 
 
 
 if __name__ == "__main__":
     # liveAiDj()
+    aidj = AiDj()
+
     while(True):
         print('--------------------------------------------------')
         cmd = input('Press enter to process or type \'exit\' to end: ')
         if cmd == 'exit':
             sys.exit()
     
-        liveAiDj()
+        aidj.liveAiDj()
     #testSynthetic()
