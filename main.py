@@ -16,7 +16,7 @@ class AiDj():
         #Instantiate a new decision tree object
 
         #Perform a prediction based on input data (hardcoded for now)
-        data = self.computer_vision.get_data()
+        (data, motion) = self.computer_vision.get_data()
 
         print(data)
 

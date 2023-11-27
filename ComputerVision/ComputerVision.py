@@ -190,7 +190,7 @@ class ComputerVision:
         data['count']   = count
         data.update(emotions)
         data.update(pi_data)
-        return pd.DataFrame([data])
+        return (pd.DataFrame([data]), motion)
     
     """
     Normalizes the emotions dictionary by converting any None values to 0, finding the max occurring emotion, 
