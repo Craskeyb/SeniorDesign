@@ -27,8 +27,8 @@ class AiDj():
 
         print(data)
 
-        prediction = self.decisionTree.giniPrediction(data)
-        # prediction = decisionTree.giniPrediction([[10,0,0,0,1,0,0,0,20.11,120]])
+        # prediction = self.decisionTree.giniPrediction(data)
+        prediction = self.decisionTree.giniPrediction([[10,0,0,0,1,0,0,0,20.11,200]])
         print("\nGini prediction for input data: " + prediction)
 
         #Evaluate the prediction using the methods found in predictionEval.py
@@ -62,4 +62,5 @@ if __name__ == "__main__":
             sys.exit()
     
         aidj.liveAiDj()
+        aidj.decisionTree.plotTree()
     #testSynthetic()

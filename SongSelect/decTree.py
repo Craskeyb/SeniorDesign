@@ -140,8 +140,8 @@ class decTree:
         print("Average scenario score: " + str(statistics.mean(scenarioArr)*100//1))
 
     #Function to generate and display a visualization of the tree, which includes the splitting criteria at each node
-    def plotTree(self, decTree):
+    def plotTree(self):
         # Plotting visualization of tree
         plt.figure(figsize=(20,10))
-        tree.plot_tree(decTree)
+        tree.plot_tree(self.giniModel)
         plt.show()
