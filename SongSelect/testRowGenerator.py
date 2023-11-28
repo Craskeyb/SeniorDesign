@@ -6,6 +6,7 @@ def rowGenerator():
     # Define the possible values for each column
     count_values = list(range(1, 21))
     emotion_values = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
+    motion_values = ['High','Medium','Low']
     emoteDict = {'angry':0,'disgust':0,'fear':0,'happy':0,'neutral':0,'sad':0,'surprise':0}
     temperature_values = [round(random.uniform(17, 30), 2) for _ in range(700)]
     light_values = list(range(30,220))
@@ -23,6 +24,6 @@ def rowGenerator():
     sensorDict = {'temperature':randTemp,'light':randLight}
     data.update(sensorDict)
 
-    return pd.DataFrame([data])
+    return (pd.DataFrame([data]), random.choice(motion_values))
 
 

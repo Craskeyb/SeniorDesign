@@ -1,5 +1,6 @@
 from SongSelect.decTree import decTree
 from SongSelect.SpotifyCalls.spotifyImpl import RecGenerator
+from SongSelect.testRowGenerator import rowGenerator
 from ComputerVision.ComputerVision import ComputerVision
 import sys
 
@@ -19,7 +20,10 @@ class AiDj():
         #Instantiate a new decision tree object
 
         #Perform a prediction based on input data (hardcoded for now)
-        (data, motion) = self.computer_vision.get_data()
+        #(data, motion) = self.computer_vision.get_data()
+
+        #Perform a prediction based on random synthetic input data
+        (data, motion) = rowGenerator()
 
         print(data)
 
