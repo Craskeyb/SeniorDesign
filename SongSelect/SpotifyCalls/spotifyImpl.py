@@ -74,6 +74,7 @@ class RecGenerator:
             time.sleep(2)
             self.sp.add_to_queue(rec["uri"])
         
+        time.sleep(2)
         self.skipToNew(prunedRecs)
 
     
@@ -82,4 +83,4 @@ class RecGenerator:
         while self.sp.currently_playing()['item']['name'] != prunedRecs[0]['name']:
             time.sleep(2)
             self.sp.next_track()
-            
+            time.sleep(2)
