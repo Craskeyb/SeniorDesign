@@ -12,6 +12,9 @@ class AiDj():
         self.decisionTree = decTree()
         self.computer_vision = ComputerVision()
 
+        #Instantiate the Spotify API Application
+        self.songRecs = RecGenerator()
+
     def liveAiDj(self):
         #Instantiate a new decision tree object
 
@@ -28,9 +31,9 @@ class AiDj():
         #decisionTree.evaluatePrediction([10,0,0,0,1,0,0,0,20.11,120], prediction)
         self.decisionTree.evaluatePrediction(data.iloc[0], prediction)
 
-        #Instantiate the Spotify API Application
-        songRecs = RecGenerator()
-        songRecs.makeRecommendation(prediction)
+        
+        self.songRecs.makeRecommendation(prediction, motion)
+
 
     def testSynthetic(self):
         #Instantiate a new decision tree object

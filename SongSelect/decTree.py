@@ -144,5 +144,3 @@ class decTree:
         plt.figure(figsize=(20,10))
         tree.plot_tree(decTree)
         plt.show()
-
-    

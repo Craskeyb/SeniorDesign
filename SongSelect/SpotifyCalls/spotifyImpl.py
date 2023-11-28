@@ -78,4 +78,3 @@ class RecGenerator:
         self.sp.add_to_queue(prunedRecs[1]["uri"])
         self.sp.add_to_queue(prunedRecs[2]["uri"])
 
-        
