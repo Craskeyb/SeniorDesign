@@ -33,8 +33,11 @@ class AiDj():
 
         #Evaluate the prediction using the methods found in predictionEval.py
         #decisionTree.evaluatePrediction([10,0,0,0,1,0,0,0,20.11,120], prediction)
-        self.decisionTree.evaluatePrediction(data.iloc[0], prediction)
-
+        emoteScore, inputScore, scenScore = self.decisionTree.evaluatePrediction(data.iloc[0], prediction)
+        if emoteScore*100//1 > 85 and inputScore*100//1 > 60 and scenScore*100//1 > 40:
+            print("Good recommendation, appending to training set")
+        else:
+            print("Bad recommendation, re-requesting data for new prediction")
         
         self.songRecs.makeRecommendation(prediction, motion)
 

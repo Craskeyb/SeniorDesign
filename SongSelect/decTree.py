@@ -120,6 +120,7 @@ class decTree:
         print("Input similarity: " + str(inputScore*100//1) + "%")
 
         print("Scenario Score: " + str(scenarioScore*100//1) + "%")
+        return emotionScore, inputScore, scenarioScore
 
     #Function to perform the prediction evaluation for the whole set of test data (performs on every row, and averages the result)
     def evaluateSyntheticPredictions(self, testData, prediction):
