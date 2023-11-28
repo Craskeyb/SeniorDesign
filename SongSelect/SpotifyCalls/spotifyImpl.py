@@ -42,15 +42,15 @@ class RecGenerator:
         #After getting tempos, choose the songs that best fit based on amount of motion
         prunedRecs = []
         if motion == 'High':
-            while len(prunedRecs) < 4: #If high motion, take the 3 highest tempos from the recs
+            while len(prunedRecs) < 3: #If high motion, take the 3 highest tempos from the recs
                 prunedRecs.append(recs["tracks"][songTempos.index(max(songTempos))])
                 songTempos[songTempos.index(max(songTempos))] = 0 #Set val to zero to avoid double selection
         elif motion == 'Medium':
-            while len(prunedRecs) < 4: #If medium, take the 3 median values from the recs
+            while len(prunedRecs) < 3: #If medium, take the 3 median values from the recs
                 prunedRecs.append(recs["tracks"][songTempos.index(statistics.median(songTempos))])
                 songTempos[songTempos.index(statistics.median(songTempos))] = 0 #Set val to zero to avoid double selection
         else:
-            while len(prunedRecs) < 4: #If low, take the 3 min values from the recs
+            while len(prunedRecs) < 3: #If low, take the 3 min values from the recs
                 prunedRecs.append(recs["tracks"][songTempos.index(min(songTempos))])
                 songTempos[songTempos.index(min(songTempos))] = 10**5 #Set value at index of min to be very high so it is not selected twice
 
@@ -71,7 +71,7 @@ class RecGenerator:
             artist = rec['artists'][0]['name']
             track = rec['name']
             print(artist + " - " + track)
-            time.sleep(1)
+            time.sleep(2)
             self.sp.add_to_queue(rec["uri"])
         
         self.skipToNew(prunedRecs)
