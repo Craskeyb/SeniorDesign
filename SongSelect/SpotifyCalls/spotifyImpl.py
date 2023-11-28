@@ -13,9 +13,6 @@ class RecGenerator:
 
         self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cred.CLIENT_ID, client_secret=cred.CLIENT_SECRET, redirect_uri=cred.REDIRECT_URI,scope=scope))  
 
-        #Internal variable to keep track of the songs that have been played already to avoid repeats
-        self.played = []
-
     #Recommendation Method
     def makeRecommendation(self, genre, motion):
         #Get recommendations from Spotify API
