@@ -76,4 +76,11 @@ class RecGenerator:
         self.sp.add_to_queue(prunedRecs[0]["uri"])  
         self.sp.add_to_queue(prunedRecs[1]["uri"])
         self.sp.add_to_queue(prunedRecs[2]["uri"])
-        self.sp.next_track()
+        self.skipToNew(prunedRecs)
+
+    
+    #Function to skip to recently queued songs
+    def skipToNew(self, prunedRecs):
+        while self.sp.currently_playing()['name'] != prunedRecs[0]['name']:
+            self.sp.next_track()
+            
