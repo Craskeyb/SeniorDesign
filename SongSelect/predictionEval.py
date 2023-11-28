@@ -5,7 +5,7 @@ from SongSelect import knn
 
 def similarityScore(test, prediction, train):
     neighbors = knn.kNearest(train, test, prediction, 5)
-    test = test[0:-2]
+    #test = test[0:-2]
     
     
     emotionSim = []
