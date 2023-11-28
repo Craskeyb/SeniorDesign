@@ -73,8 +73,7 @@ class RecGenerator:
             print(artist + " - " + track)
         
         #Queueing the pruned songs
-        self.sp.add_to_queue(prunedRecs[0]["uri"])
-        self.sp.next_track()  
+        self.sp.add_to_queue(prunedRecs[0]["uri"])  
         self.sp.add_to_queue(prunedRecs[1]["uri"])
         self.sp.add_to_queue(prunedRecs[2]["uri"])
-
+        self.sp.next_track()

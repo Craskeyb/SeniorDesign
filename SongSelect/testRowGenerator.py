@@ -15,3 +15,6 @@ def rowGenerator():
     randCount = random.choice(count_values)
     randTemp = random.choice(temperature_values)
     randLight = random.choice(light_values)
+
+    data["count"] = random.choice(count_values)
+    
