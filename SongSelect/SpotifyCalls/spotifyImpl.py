@@ -83,4 +83,7 @@ class RecGenerator:
         while self.sp.currently_playing()['item']['name'] != prunedRecs[0]['name']:
             time.sleep(1)
             self.sp.next_track()
+            self.sp.pause_playback()
             time.sleep(1)
+
+        self.sp.start_playback()
