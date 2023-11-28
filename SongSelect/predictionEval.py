@@ -7,6 +7,8 @@ def similarityScore(test, prediction, train):
     neighbors = knn.kNearest(train, test, prediction, 5)
     #test = test[0:-2]
     
+    print(test)
+    print(neighbors[0])
     
     emotionSim = []
     emTemp = []
