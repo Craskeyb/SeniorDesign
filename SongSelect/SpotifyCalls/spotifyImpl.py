@@ -82,5 +82,6 @@ class RecGenerator:
     #Function to skip to recently queued songs
     def skipToNew(self, prunedRecs):
         while self.sp.currently_playing()['item']['name'] != prunedRecs[0]['name']:
+            time.sleep(2)
             self.sp.next_track()
             
