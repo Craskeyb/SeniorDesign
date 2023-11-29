@@ -7,6 +7,7 @@ import cv2
 
 class EmotionDetection():
     def __init__(self):
+        tf.get_logger().setLevel('ERROR')
         self.model = tf.keras.models.load_model('ComputerVision\\emotion_recognition_model_5.keras')
         self.class_names =  ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
         pass
@@ -21,11 +22,11 @@ class EmotionDetection():
             img_array = tf.keras.utils.img_to_array(img)
             img_array = tf.expand_dims(img_array, 0)
 
-            predictions = self.model.predict(img_array)
+            predictions = self.model.predict(img_array, verbose=0)
             score = tf.nn.softmax(predictions[0])
             emotion = self.class_names[np.argmax(score)]
             print(
-                images + " most likely belongs to {} with a {:.2f} percent confidence."
+                images + " is {} with a {:.2f} percent confidence."
                 .format(emotion, 100 * np.max(score))
             )
 
@@ -34,9 +35,8 @@ class EmotionDetection():
             else:
                 emotions[emotion] = 1
 
-            print(score.numpy())
             self.plot_prediction(images, oimg, score.numpy().tolist(), emotion)
-        plt.show()
+        plt.show(block=False)
         return emotions
     
     def plot_prediction(self, name, image, scores, emotion):
@@ -46,7 +46,7 @@ class EmotionDetection():
         plt.xticks([])
         plt.yticks([])
         plt.imshow(image)
-        plt.xlabel(emotion + str(100*np.max(scores)))
+        plt.xlabel(emotion + " " +  str(100*np.max(scores)))
 
         plt.subplot(1,2,2)
         plt.grid(False)

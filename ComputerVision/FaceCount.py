@@ -3,6 +3,7 @@ import time
 import face_detection
 import shutil
 import os
+import matplotlib.pyplot as plt
 
 class FaceCount:
 
@@ -17,13 +18,19 @@ class FaceCount:
         img = cv2.resize(original_img, (int((original_img.shape[1]*(1/self.scale_factor))), int(original_img.shape[0]*(1/self.scale_factor)))) 
 
         im = img[:, :, ::-1]
+
+        img_color = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
   
         faces = self.detector.detect(im)
 
-        face_image = self.draw_faces(faces, img)
+        face_image = self.draw_faces(faces, img_color)
         self.save_faces(faces, original_img)
 
-        # cv2.imshow("Detected Faces", face_image)
+        plt.figure("Detected Faces")
+        plt.imshow(face_image, cmap='gray')
+        plt.title("Faces Detected: " + str(len(faces)))
+        plt.show(block=False)
+
 
         end = time.time()
 
