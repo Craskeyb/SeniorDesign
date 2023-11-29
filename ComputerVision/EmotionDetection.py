@@ -15,6 +15,10 @@ class EmotionDetection():
     def classify(self):
         emotions = {}
         emotions = dict.fromkeys(self.class_names, None)
+
+        imgnum = 1
+        num_imgs = len(os.listdir('ComputerVision\\faces'))
+        plt.figure("Emotions")
         
         for images in os.listdir('ComputerVision\\faces'):
             oimg = cv2.imread('ComputerVision\\faces\\' + images)
@@ -35,20 +39,21 @@ class EmotionDetection():
             else:
                 emotions[emotion] = 1
 
-            self.plot_prediction(images, oimg, score.numpy().tolist(), emotion)
+            self.plot_prediction(images, oimg, score.numpy().tolist(), emotion, imgnum, num_imgs)
+            imgnum += 2
         plt.show(block=False)
         return emotions
     
-    def plot_prediction(self, name, image, scores, emotion):
-        plt.figure(name)
-        plt.subplot(1,2,1)
+    def plot_prediction(self, name, image, scores, emotion, im_num, num_images):
+        # plt.figure(name)
+        plt.subplot(num_images,2,im_num)
         plt.grid(False)
         plt.xticks([])
         plt.yticks([])
         plt.imshow(image)
         plt.xlabel(emotion + " " +  str(100*np.max(scores)))
 
-        plt.subplot(1,2,2)
+        plt.subplot(num_images,2,im_num+1)
         plt.grid(False)
         plt.xticks(np.arange(7), ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise'], rotation=90)
         plt.yticks([])

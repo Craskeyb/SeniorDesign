@@ -3,6 +3,7 @@ from SongSelect.SpotifyCalls.spotifyImpl import RecGenerator
 from SongSelect.testRowGenerator import rowGenerator
 from ComputerVision.ComputerVision import ComputerVision
 import sys
+import matplotlib.pyplot as plt
 
 class AiDj():
     def __init__(self):
@@ -12,6 +13,7 @@ class AiDj():
         print("Initializing components...")
         self.decisionTree = decTree()
         self.computer_vision = ComputerVision()
+        print("All components ready\n\n")
 
         #Instantiate the Spotify API Application
         self.songRecs = RecGenerator()
@@ -20,10 +22,10 @@ class AiDj():
         #Instantiate a new decision tree object
 
         #Perform a prediction based on input data (hardcoded for now)
-        #(data, motion) = self.computer_vision.get_data()
+        (data, motion) = self.computer_vision.get_data()
 
         #Perform a prediction based on random synthetic input data
-        (data, motion) = rowGenerator()
+        # (data, motion) = rowGenerator()
 
         print(data)
 
@@ -60,7 +62,11 @@ if __name__ == "__main__":
         cmd = input('Press enter to process or type \'exit\' to end: ')
         if cmd == 'exit':
             sys.exit()
-    
-        aidj.liveAiDj()
-        aidj.decisionTree.plotTree()
+        plt.close('all')
+
+        try:
+            aidj.liveAiDj()
+        except:
+            print("Error Occurred. Try again")
+        # aidj.decisionTree.plotTree()
     #testSynthetic()

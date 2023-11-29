@@ -10,7 +10,7 @@ import pandas as pd
 import socket
 import json
 import base64
-
+import time
 
 class ComputerVision:
     """
@@ -69,14 +69,14 @@ class ComputerVision:
     """
     def get_pi_data(self, image_name):
         # Raspberry Pi Socket configuration
-        TCP_IP      = '192.168.137.134'
+        TCP_IP      = '192.168.137.166'
         TCP_PORT    = 2222
         BUFFER_SIZE = 8192
         
         # Establish connection with TCP socket
         print("Attempting to connect to raspberry pi...")
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.settimeout(3)
+        # s.settimeout(3)
         try:
             s.connect((TCP_IP, TCP_PORT))
         except socket.timeout:
@@ -84,10 +84,12 @@ class ComputerVision:
             raise RuntimeError
         print("Connected to raspberry pi @\n", TCP_IP)
 
+
         # Send 'R' to request data
         inp = 'R'
         s.send(inp.encode('utf-8'))
         data = b''
+        print("Requested Data")
 
         # Receive until no packets remain
         while True:
@@ -95,7 +97,7 @@ class ComputerVision:
             if not packet:
                 break
             data += packet
-
+        print("Image Received")
         # Attempt to convert received data to values and image
         try:
             received_data = json.loads(data.decode('utf-8'))
@@ -119,6 +121,8 @@ class ComputerVision:
 
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}")
+        except Exception as error:
+            print("Error occured while converting data:", error)
 
         # Close the connection
         s.close()
@@ -152,12 +156,17 @@ class ComputerVision:
     def get_data(self): 
         data = {}
 
+        temp1, temp2 = 0, 0
+        light1, light2 = 0, 0
+
         try:
             # Get first image and measurements
             (temp1, light1) = self.get_pi_data('ComputerVision\\received_image.jpg')
             #computer_vision.get_webcam_image()
-        except:
+        except Exception as error:
             print("Error: Error occured while retrieving Raspberry Pi Data")
+            print("ERROR:", error)
+            raise RuntimeError 
             return
 
         # Get count of faces
