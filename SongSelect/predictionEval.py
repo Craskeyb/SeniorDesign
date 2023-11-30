@@ -1,7 +1,8 @@
 import statistics
 import numpy as np
 import pandas as pd
-from SongSelect import knn
+'''from SongSelect'''
+import knn
 
 def similarityScore(test, prediction, train):
     neighbors = knn.kNearest(train, test, prediction, 5)

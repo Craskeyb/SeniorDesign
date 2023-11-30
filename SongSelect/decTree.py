@@ -8,12 +8,14 @@ from sklearn import tree
 from sklearn.metrics import accuracy_score 
 import matplotlib.pyplot as plt
 import statistics
-from SongSelect import predictionEval
+'''from SongSelect'''
+import predictionEval
 
 class decTree:
     def __init__(self):
         #First, import the data from the training data file (will be using example data)
-        self.inputData = pd.read_csv('Datasets\\trainingData.csv')
+        self.inputData = pd.read_csv('Datasets\\reinforcementTrainingData.csv')
+        #self.inputData = pd.read_csv('Datasets\\trainingData.csv')
 
         #Reading in the data we want to predict from
         self.cleanInput = self.inputData.loc[:,~self.inputData.columns.isin(['genre'])]
@@ -116,10 +118,10 @@ class decTree:
         emotionScore, inputScore = predictionEval.similarityScore(testData, prediction, self.inputData)
         scenarioScore = predictionEval.scenarioScore(testData, prediction)
 
-        print("\nEmotion similarity: " + str(emotionScore*100//1) + "%")
-        print("Input similarity: " + str(inputScore*100//1) + "%")
+        # print("\nEmotion similarity: " + str(emotionScore*100//1) + "%")
+        # print("Input similarity: " + str(inputScore*100//1) + "%")
 
-        print("Scenario Score: " + str(scenarioScore*100//1) + "%")
+        # print("Scenario Score: " + str(scenarioScore*100//1) + "%")
         return emotionScore, inputScore, scenarioScore
 
     #Function to perform the prediction evaluation for the whole set of test data (performs on every row, and averages the result)
