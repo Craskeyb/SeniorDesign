@@ -5,6 +5,7 @@ from ComputerVision.ComputerVision import ComputerVision
 import sys
 import matplotlib.pyplot as plt
 import time
+import csv
 
 class AiDj():
     def __init__(self):
@@ -19,6 +20,11 @@ class AiDj():
         self.decisionTree = decTree()
         self.computer_vision = ComputerVision()
 
+        #Keep track of the number of predictions, as well as the amount of 'good' predictions
+        self.iterations = 0
+        self.goodRecs = 0
+        self.latencyTimes = []
+
         #Instantiate the Spotify API Application
         self.songRecs = RecGenerator()
         end = time.time()
@@ -32,12 +38,15 @@ class AiDj():
             self.e2eStart = time.time()
             self.initialRun = False
 
+        currentLatencies = {}
+
         #Perform a prediction based on input data (hardcoded for now)
         #Take note of latency for data retrieval
         start = time.time()
         (data, motion) = self.computer_vision.get_data()
         end = time.time()
         runtime_ms = (end-start)*1000
+        currentLatencies['CV'] = runtime_ms
         print("Data retrieved in " + str(runtime_ms) + "ms\n\n")
         #Perform a prediction based on random synthetic input data
         # (data, motion) = rowGenerator()
@@ -46,6 +55,7 @@ class AiDj():
 
         predStart = time.time()
         prediction = self.decisionTree.giniPrediction(data)
+        self.iterations += 1
         # prediction = self.decisionTree.giniPrediction([[10,0,0,0,1,0,0,0,20.11,200]])
         predEnd = time.time()
 
@@ -53,6 +63,7 @@ class AiDj():
         print("\nGini prediction for input data: " + prediction)
         print("\nPrediction generated in " + str(predRuntime_ms) + "ms")
 
+        currentLatencies['ML'] = predRuntime_ms
 
         #Evaluate the prediction using the methods found in predictionEval.py
         evalStart = time.time()
@@ -65,11 +76,15 @@ class AiDj():
         evalRuntime_ms = (evalEnd - evalStart)*1000
         print('\nPrediction evaluation complete in ' + str(evalRuntime_ms) + 'ms')
         
+        currentLatencies['Eval'] = evalRuntime_ms
+
         #Print result of the prediction evaluation
         if emoteScore*100//1 > 85 and inputScore*100//1 > 60 and scenScore*100//1 > 40:
             print("Good recommendation, appending to training set")
+            self.goodRecs += 1
+            data.to_csv('Datasets\\reinforcementTrainingData.csv', mode='a', index=False, header=False)
         else:
-            print("Bad recommendation, re-requesting data for new prediction")
+            print("Bad recommendation, will be ignored for training set")
 
         #Make recommendation based on prediction & motion, and record latency
         recStart = time.time()
@@ -80,17 +95,22 @@ class AiDj():
         recRuntime_ms = (recEnd - recStart)*1000
         print("\nRecommendation complete in " + str(recRuntime_ms) + "ms")
         
+        currentLatencies['Spotify'] = recRuntime_ms
+
         if self.initialRun == True:
             self.e2eRuntime_ms = (self.e2eEnd - self.e2eStart)*1000
             print("\nEnd-to-end runtime from startup to generation of first rec: " + str(self.e2eRuntime_ms) + "ms")
+            currentLatencies['E2E'] = self.e2eRuntime_ms
         else:
             self.e2eRuntime_ms = (self.e2eEnd - self.e2eStart)*1000
             print("\nEnd-to-end runtime for subsequent: " + str(self.e2eRuntime_ms) + "ms")
+            currentLatencies['E2E'] = self.e2eRuntime_ms
 
+        self.latencyTimes.append(currentLatencies)
         self.e2eStart = 0
 
         #TODO: write logic + loop to check the # of songs in queue, and if its less than 3 queue until there are 3
-
+        #TODO: possibly add this in the __name__ == '__main__' function
 
 
     def testSynthetic(self):
@@ -99,6 +119,47 @@ class AiDj():
 
         #Perform test of large synthetic data set utilizing randomly chosen input rows
         decisionTree.testSyntheticData()
+    
+    def generatePerformanceData(self):
+        performanceFile = open("performanceData.txt", "w")
+        performanceFile.write("Performance Data for Recent Session with Live AI DJ"+
+                              "n---------------------------------------------------\n")
+        performanceFile.write("Total number of predictions made: " + str(self.iterations) + 
+                              "\nGood predictions (appended to training data): " + str(self.goodRecs) +  
+                              "\nPercentage of good predictions: " + str(((self.goodRecs/self.iterations)*100)//1))
+        
+        #Now calculating latencies and adding them to the performance file
+        avgCV = 0
+        avgML = 0
+        avgEval = 0
+        avgSpotify = 0
+        avgE2E = 0
+        
+        with open('latencyData.csv', mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writeRow(['CV', 'ML', 'Eval', 'Spotify', 'E2E'])
+            
+            for trials in self.latencyTimes:
+                avgCV+=trials['CV']
+                avgML+=trials['ML']
+                avgEval+=trials['Eval']
+                avgSpotify+=trials['Spotify']
+                avgE2E+=trials['E2E']
+
+                writer.writeRow([trials['CV'], trials['ML'], trials['Eval'], trials['Spotify'], trials['E2E']])
+        
+        performanceFile.write("\n\nLatency Data (in milliseconds)" + 
+                              "\n------------------\n")
+        
+        performanceFile.write("Average latency for Computer Vision module: " + str(avgCV/len(self.latencyTimes))+
+                              "\nAverage latency for Machine Learning predictions: " + str(avgML/len(self.latencyTimes))+ 
+                              "\nAverage latency for prediction evaluation function: " + str(avgEval/len(self.latencyTimes))+
+                              "\nAverage latency for Spotify API calls: " + str(avgSpotify/len(self.latencyTimes))+
+                              "\nAverage end-to-end runtime for program: " + str(avgE2E/len(self.latencyTimes))+
+                              "\n\nComplete latency data for each function can be found in \'latencyData.csv\'")
+
+        
+        
 
 
 
@@ -110,9 +171,10 @@ if __name__ == "__main__":
         print('--------------------------------------------------')
         cmd = input('Press enter to process or type \'exit\' to end: ')
         if cmd == 'exit':
+            aidj.generatePerformanceData()
             sys.exit()
         plt.close('all')
-
+        
         try:
             aidj.liveAiDj()
         except Exception as error:
