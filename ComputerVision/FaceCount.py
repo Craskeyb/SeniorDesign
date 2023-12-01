@@ -10,6 +10,7 @@ class FaceCount:
     def __init__(self) -> None:
         self.detector = face_detection.build_detector("DSFDDetector", confidence_threshold=0.5, nms_iou_threshold=0.3)
         self.scale_factor = 4
+        self.face_cascade = cv2.CascadeClassifier('ComputerVision\\haarcascade_eye.xml')
     
     def get_face_count(self, image):
         start = time.time()
@@ -70,6 +71,8 @@ class FaceCount:
 
             fname = "ComputerVision\\faces\\face" + str(i) + ".jpg"
 
+            # self.validate_face(extracted_face, fname)
+
             cv2.imwrite(fname, extracted_face)
 
     def clear_output_folder(self):
@@ -78,3 +81,15 @@ class FaceCount:
             os.makedirs('ComputerVision\\faces')
         except Exception as e:
             print("Error: ", e)
+
+    def validate_face(self, face_im, name):
+        face_im2 = cv2.resize(face_im, (48,48))
+        face_im2 = cv2.copyMakeBorder(face_im2,150,150,150,150,cv2.BORDER_CONSTANT)
+        faces = self.face_cascade.detectMultiScale(face_im2, 1.1, 5)
+        if len(faces):
+            plt.imshow(face_im2, cmap='gray')
+            plt.show(block=False)
+            print("Face Validation")
+            print(faces)
+            cv2.imwrite(name, face_im)
+        

@@ -69,7 +69,7 @@ class ComputerVision:
     """
     def get_pi_data(self, image_name):
         # Raspberry Pi Socket configuration
-        TCP_IP      = '192.168.137.166'
+        TCP_IP      = '172.20.10.7'
         TCP_PORT    = 2222
         BUFFER_SIZE = 8192
         
@@ -182,7 +182,7 @@ class ComputerVision:
         emotions = self.norm_emotions(emotions)
 
 
-        # Get second image and measurements
+        # # Get second image and measurements
         (temp2, light2) = self.get_pi_data('ComputerVision\\received_image1.jpg')  
 
         # Calculate average of pi sensor data

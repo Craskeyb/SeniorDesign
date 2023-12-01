@@ -115,7 +115,8 @@ if __name__ == "__main__":
 
         try:
             aidj.liveAiDj()
-        except:
+        except Exception as error:
             print("Error Occurred. Try again")
+            print("ERROR: ", error)
         # aidj.decisionTree.plotTree()
     #testSynthetic()
