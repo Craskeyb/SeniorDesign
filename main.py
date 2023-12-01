@@ -82,6 +82,7 @@ class AiDj():
         if emoteScore*100//1 > 85 and inputScore*100//1 > 60 and scenScore*100//1 > 40:
             print("Good recommendation, appending to training set")
             self.goodRecs += 1
+            data=data.assign(genre=[prediction[0]])
             data.to_csv('Datasets\\reinforcementTrainingData.csv', mode='a', index=False, header=False)
         else:
             print("Bad recommendation, will be ignored for training set")
@@ -174,7 +175,7 @@ if __name__ == "__main__":
             aidj.generatePerformanceData()
             sys.exit()
         plt.close('all')
-        
+
         try:
             aidj.liveAiDj()
         except Exception as error:
