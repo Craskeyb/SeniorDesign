@@ -9,7 +9,7 @@ import time
 class RecGenerator:
     def __init__(self):
         #Scope for testing purposes of API calls and rate limit testing
-        scope = ["user-read-recently-played","user-modify-playback-state","user-read-currently-playing"]
+        scope = ["user-read-recently-played","user-modify-playback-state","user-read-currently-playing", "user-read-playback-state"]
 
         self.sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=cred.CLIENT_ID, client_secret=cred.CLIENT_SECRET, redirect_uri=cred.REDIRECT_URI,scope=scope))  
 
@@ -72,7 +72,7 @@ class RecGenerator:
             self.sp.add_to_queue(rec["uri"])
         
         time.sleep(1)
-        self.skipToNew(prunedRecs)
+        return prunedRecs
 
     
     #Function to skip to recently queued songs
@@ -86,5 +86,12 @@ class RecGenerator:
         self.sp.start_playback()
 
     #Function to check the current length of the queue to determine how many songs need to be queued
-    def getQueueLen(self):
-        return len(self.sp.queue())
+    def getQueueLen(self, trackname):
+        print("checking for track", trackname)
+        for i, tracks in enumerate(self.sp.queue()['queue']):
+            if tracks['name'] == trackname:
+                print("Queue Len", i)
+                return i
+        return 0
+            
+        

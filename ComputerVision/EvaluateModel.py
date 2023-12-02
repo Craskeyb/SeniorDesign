@@ -1,26 +1,25 @@
 import tensorflow as tf
-import os
 import numpy as np
 import matplotlib.pyplot as plt
-import cv2
 import keras 
 import seaborn
 import sklearn.metrics as met
-import sklearn
 
 model = tf.keras.models.load_model('emotion_recognition_model_5.keras')
+# class_names =  ['angry', 'fear', 'happy', 'neutral', 'sad', 'surprise']
 class_names =  ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
+tf.keras.utils.plot_model(model, to_file='model.png', show_shapes=True)
 
 test_ds = keras.utils.image_dataset_from_directory(
   'fer-2013\\test',
   labels="inferred",
   shuffle=False,
-  label_mode="int",
+  label_mode="int", 
   image_size=(48, 48))
 
 test_labels = np.concatenate([y for _,y in test_ds], axis=0).tolist()
 
-type_counts = [test_labels.count(i) for i in range(7)]
+type_counts = [test_labels.count(i) for i in range(len(class_names))]
 for i, c in enumerate(type_counts):
   print("Found", c, "files belonging to", class_names[i], ".")
 

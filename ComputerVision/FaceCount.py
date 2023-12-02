@@ -6,12 +6,25 @@ import os
 import matplotlib.pyplot as plt
 
 class FaceCount:
-
+    """
+    Constructor to initialize detector models
+    """
     def __init__(self) -> None:
         self.detector = face_detection.build_detector("DSFDDetector", confidence_threshold=0.5, nms_iou_threshold=0.3)
         self.scale_factor = 4
         self.face_cascade = cv2.CascadeClassifier('ComputerVision\\haarcascade_eye.xml')
     
+    """
+    Gets the count of faces from an imput image
+    Also optionally does:
+        1. Display image with faces highlighted
+        2. Save individual faces in image files
+
+    Args:
+        image: the image to count faces in
+    Returns:
+        int: a count of the faces detected
+    """
     def get_face_count(self, image):
         start = time.time()
         original_img = cv2.imread(image)
@@ -32,13 +45,19 @@ class FaceCount:
         plt.title("Faces Detected: " + str(len(faces)))
         plt.show(block=False)
 
-
         end = time.time()
 
         print("FaceCount Execution time: ", end-start, "s")
 
         return len(faces)
 
+    """
+    Draws boxes around the detected faces on the original image
+
+    Args:
+        faces: list of detected faces
+        image: original image to draw box on
+    """
     def draw_faces(self, faces, image):
         for face in faces:
             if face.item(4) >= 0.1:
@@ -51,6 +70,13 @@ class FaceCount:
 
         return image
     
+    """
+    Save the detected faces
+
+    Args:
+        faces: list of detected faces
+        image: original image to extract face from
+    """
     def save_faces(self, faces, image):
         self.clear_output_folder()
 
@@ -66,15 +92,19 @@ class FaceCount:
             y2_scaled = y2 * self.scale_factor
 
             extracted_face = image[y1_scaled:y2_scaled, x1_scaled:x2_scaled]
-            # extracted_face = cv2.resize(extracted_face, (100,100))
             extracted_face = cv2.cvtColor(extracted_face, cv2.COLOR_BGR2GRAY)
 
             fname = "ComputerVision\\faces\\face" + str(i) + ".jpg"
 
+            # Optional call to further validate detected faces before saving
             # self.validate_face(extracted_face, fname)
 
+            # Only use if not validating faces!
             cv2.imwrite(fname, extracted_face)
 
+    """
+    Clears the output folder of all previously extracted faces
+    """
     def clear_output_folder(self):
         try:
             shutil.rmtree('ComputerVision\\faces')
@@ -82,14 +112,21 @@ class FaceCount:
         except Exception as e:
             print("Error: ", e)
 
+    
+    """
+    Validates a face by checking if eyes are present using cascade detector.
+    If >1 eye is detected, save the image
+
+    Args:
+        face_im: image to validate
+        name: name to save file as
+    """
     def validate_face(self, face_im, name):
-        face_im2 = cv2.resize(face_im, (48,48))
-        face_im2 = cv2.copyMakeBorder(face_im2,150,150,150,150,cv2.BORDER_CONSTANT)
-        faces = self.face_cascade.detectMultiScale(face_im2, 1.1, 5)
-        if len(faces):
-            plt.imshow(face_im2, cmap='gray')
-            plt.show(block=False)
-            print("Face Validation")
-            print(faces)
+        face_im2 = cv2.resize(face_im, (48, 48))
+        face_im2 = cv2.copyMakeBorder(face_im2, 150, 150, 150, 150, cv2.BORDER_CONSTANT)
+
+        eyes = self.face_cascade.detectMultiScale(face_im2, 1.1, 5)
+
+        if len(eyes):
             cv2.imwrite(name, face_im)
         

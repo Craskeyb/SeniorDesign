@@ -6,12 +6,22 @@ import cv2
 
 
 class EmotionDetection():
+    
+    """
+    Constructor to initialize the emotion detection CNN model
+    """
     def __init__(self):
         tf.get_logger().setLevel('ERROR')
         self.model = tf.keras.models.load_model('ComputerVision\\emotion_recognition_model_5.keras')
         self.class_names =  ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
         pass
     
+    """
+    Classifies all of the images in the ComputerVision/Faces directory using the CNN model
+
+    Returns:
+        
+    """
     def classify(self):
         emotions = {}
         emotions = dict.fromkeys(self.class_names, None)
@@ -45,7 +55,6 @@ class EmotionDetection():
         return emotions
     
     def plot_prediction(self, name, image, scores, emotion, im_num, num_images):
-        # plt.figure(name)
         plt.subplot(num_images,2,im_num)
         plt.grid(False)
         plt.xticks([])

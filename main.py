@@ -55,7 +55,6 @@ class AiDj():
 
         predStart = time.time()
         prediction = self.decisionTree.giniPrediction(data)
-        self.iterations += 1
         # prediction = self.decisionTree.giniPrediction([[10,0,0,0,1,0,0,0,20.11,200]])
         predEnd = time.time()
 
@@ -79,7 +78,8 @@ class AiDj():
         currentLatencies['Eval'] = evalRuntime_ms
 
         #Print result of the prediction evaluation
-        if emoteScore*100//1 > 85 and inputScore*100//1 > 60 and scenScore*100//1 > 40:
+        # if emoteScore*100//1 > 85 and inputScore*100//1 > 60 and scenScore*100//1 > 40:
+        if emoteScore*100//1 > 70 and inputScore*100//1 > 40 and scenScore*100//1 > 50:
             print("Good recommendation, appending to training set")
             self.goodRecs += 1
             data=data.assign(genre=[prediction[0]])
@@ -89,7 +89,11 @@ class AiDj():
 
         #Make recommendation based on prediction & motion, and record latency
         recStart = time.time()
-        self.songRecs.makeRecommendation(prediction, motion,3)
+        if self.iterations == 0:
+            self.prunedRecs = self.songRecs.makeRecommendation(prediction, motion, 3)
+            self.songRecs.skipToNew(self.prunedRecs)
+        else:
+            self.prunedRecs = self.songRecs.makeRecommendation(prediction, motion, 3 - self.songRecs.getQueueLen(self.prunedRecs[-1]['name']))
         recEnd = time.time()
         self.e2eEnd = recEnd 
         
@@ -108,10 +112,12 @@ class AiDj():
             currentLatencies['E2E'] = self.e2eRuntime_ms
 
         self.latencyTimes.append(currentLatencies)
+        print(len(self.latencyTimes))
         self.e2eStart = 0
 
-        #TODO: write logic + loop to check the # of songs in queue, and if its less than 3 queue until there are 3
-        #TODO: possibly add this in the __name__ == '__main__' function
+        self.iterations += 1
+
+
 
 
     def testSynthetic(self):
@@ -122,9 +128,10 @@ class AiDj():
         decisionTree.testSyntheticData()
     
     def generatePerformanceData(self):
-        performanceFile = open("performanceData.txt", "w")
+        fName = 'performanceData' + str(time.time()) + '.txt'
+        performanceFile = open(fName, "w")
         performanceFile.write("Performance Data for Recent Session with Live AI DJ"+
-                              "n---------------------------------------------------\n")
+                              "\n---------------------------------------------------\n")
         performanceFile.write("Total number of predictions made: " + str(self.iterations) + 
                               "\nGood predictions (appended to training data): " + str(self.goodRecs) +  
                               "\nPercentage of good predictions: " + str(((self.goodRecs/self.iterations)*100)//1))
@@ -135,10 +142,10 @@ class AiDj():
         avgEval = 0
         avgSpotify = 0
         avgE2E = 0
-        
-        with open('latencyData.csv', mode='w', newline='') as file:
+        fName = 'latencyData' + str(time.time()) + '.csv'
+        with open(fName, mode='w', newline='') as file:
             writer = csv.writer(file)
-            writer.writeRow(['CV', 'ML', 'Eval', 'Spotify', 'E2E'])
+            writer.writerow(['CV', 'ML', 'Eval', 'Spotify', 'E2E'])
             
             for trials in self.latencyTimes:
                 avgCV+=trials['CV']
@@ -147,7 +154,7 @@ class AiDj():
                 avgSpotify+=trials['Spotify']
                 avgE2E+=trials['E2E']
 
-                writer.writeRow([trials['CV'], trials['ML'], trials['Eval'], trials['Spotify'], trials['E2E']])
+                writer.writerow([trials['CV'], trials['ML'], trials['Eval'], trials['Spotify'], trials['E2E']])
         
         performanceFile.write("\n\nLatency Data (in milliseconds)" + 
                               "\n------------------\n")
@@ -168,18 +175,34 @@ if __name__ == "__main__":
     # liveAiDj()
     aidj = AiDj()
 
-    while(True):
-        print('--------------------------------------------------')
-        cmd = input('Press enter to process or type \'exit\' to end: ')
-        if cmd == 'exit':
-            aidj.generatePerformanceData()
-            sys.exit()
-        plt.close('all')
+    try:
+        while(True):
+            if aidj.iterations == 0:
+                try:
+                    aidj.liveAiDj()
+                except Exception as error:
+                    print("Error Occurred. Try again")
+                    print("ERROR: ", error)
+            if aidj.songRecs.getQueueLen(aidj.prunedRecs[-1]['name']) < 3:
+                print('--------------------------------------------------')
+                # cmd = input('Press enter to process or type \'exit\' to end: ')
+                # if cmd == 'exit':
+                #     aidj.generatePerformanceData()
+                #     sys.exit()
+                plt.close('all')
 
-        try:
-            aidj.liveAiDj()
-        except Exception as error:
-            print("Error Occurred. Try again")
-            print("ERROR: ", error)
-        # aidj.decisionTree.plotTree()
+                try:
+                    aidj.liveAiDj()
+                except Exception as error:
+                    print("Error Occurred. Try again")
+                    print("ERROR: ", error)
+            # aidj.decisionTree.plotTree()
+            time.sleep(30)
+    except KeyboardInterrupt:
+        aidj.generatePerformanceData()
+        sys.exit()
+
+
+
+
     #testSynthetic()
