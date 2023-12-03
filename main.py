@@ -24,6 +24,8 @@ class AiDj():
         self.iterations = 0
         self.goodRecs = 0
         self.latencyTimes = []
+        self.genreData = {'rock': [0,0], 'pop': [0,0], 'electronic': [0,0], 'metal': [0,0], 'classical': [0,0], 'jazz': [0,0], 'sad': [0,0]}
+        self.evalData = {"emotion": [], "input": [], "scenario": []}
 
         #Instantiate the Spotify API Application
         self.songRecs = RecGenerator()
@@ -63,13 +65,17 @@ class AiDj():
         print("\nPrediction generated in " + str(predRuntime_ms) + "ms")
 
         currentLatencies['ML'] = predRuntime_ms
+        self.genreData[prediction][0] += 1
 
         #Evaluate the prediction using the methods found in predictionEval.py
         evalStart = time.time()
 
         #decisionTree.evaluatePrediction([10,0,0,0,1,0,0,0,20.11,120], prediction)
         emoteScore, inputScore, scenScore = self.decisionTree.evaluatePrediction(data.iloc[0], prediction)
-        
+        self.evalData['emotion'].append(emoteScore)
+        self.evalData['input'].append(inputScore)
+        self.evalData['scenario'].append(scenScore)
+
         #Calculate latency for the prediction evaluation
         evalEnd = time.time()
         evalRuntime_ms = (evalEnd - evalStart)*1000
@@ -82,6 +88,7 @@ class AiDj():
         if emoteScore*100//1 > 70 and inputScore*100//1 > 40 and scenScore*100//1 > 50:
             print("Good recommendation, appending to training set")
             self.goodRecs += 1
+            self.genreData[prediction][1] += 1
             data=data.assign(genre=[prediction[0]])
             data.to_csv('Datasets\\reinforcementTrainingData.csv', mode='a', index=False, header=False)
         else:
@@ -164,10 +171,30 @@ class AiDj():
                               "\nAverage latency for prediction evaluation function: " + str(avgEval/len(self.latencyTimes))+
                               "\nAverage latency for Spotify API calls: " + str(avgSpotify/len(self.latencyTimes))+
                               "\nAverage end-to-end runtime for program: " + str(avgE2E/len(self.latencyTimes))+
-                              "\n\nComplete latency data for each function can be found in \'latencyData.csv\'")
+                              "\n\nComplete latency data for each function can be found in " + fName)
 
+        performanceFile.write("\n\nGenre Data"+ 
+                              '\n----------------')
         
+        for genre in self.genreData.keys():
+            performanceFile.write("\n# of " + genre + 'recommendations: ' + str(self.genreData[genre][0]) + 
+                                  "\n\% of good recommendations: " + str((self.genreData[genre][1]/self.genreData[genre][0])*100//1))
         
+        fName = 'evalData' + str(time.time()) + '.csv'
+        with open(fName, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['emotion', 'input', 'scenario'])
+        
+            for i in len(self.iterations):
+                writer.writerow([self.evalData['emotion'][i], self.evalData['input'][i], self.evalData['scenario'][i]])
+            
+        performanceFile.write("\n\nPrediction Evaluation Data" + 
+                              "\n------------------------------")
+        
+        performanceFile.write("\nAverage emotion score: " + mean(self.evalData['emotion']) + 
+                              "\nAverage input score: " + mean(self.evalData['input']) + 
+                              "\nAverage scenario score: " + mean(self.evalData['scenario'])+
+                              "\n\nFull prediction evaluation data can be found in " + fName)
 
 
 
