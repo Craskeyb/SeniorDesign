@@ -6,33 +6,28 @@ import time
 batch_size = 64
 img_height = 48
 img_width = 48
+num_epochs = 150
 
 print("Loading Datasets...")
 train_ds = keras.utils.image_dataset_from_directory(
   'fer-2013\\train',
   seed=123,
+  validation_split=0.2,
+  subset="training",
   image_size=(img_height, img_width),
   batch_size=batch_size)
 
 val_ds = keras.utils.image_dataset_from_directory(
-  'fer-2013\\test',
+  'fer-2013\\train',
   seed=123,
+  validation_split=0.2,
+  subset="validation",
   image_size=(img_height, img_width),
   batch_size=batch_size)
 
 print("Found classes with names: ")
 class_names = train_ds.class_names
 print(class_names)
-
-
-# plt.figure(figsize=(10, 10))
-# for images, labels in train_ds.take(2):
-#   for i in range(9):
-#     ax = plt.subplot(3, 3, i + 1)
-#     plt.imshow(images[i].numpy().astype("uint8"))
-#     plt.title(class_names[labels[i]])
-#     plt.axis("off")
-# plt.show()
 
 print("Building model...")
 AUTOTUNE = tf.data.AUTOTUNE
@@ -43,8 +38,10 @@ print("Building model...")
 
 data_augmentation = keras.Sequential(
   [
-    keras.layers.RandomRotation(0.1),
+    keras.layers.RandomRotation(0.3),
     keras.layers.RandomZoom(0.1),
+    keras.layers.RandomTranslation(height_factor=0.2, width_factor=0.2),
+    keras.layers.RandomFlip(mode="horizontal"),
   ]
 )
 
@@ -53,23 +50,21 @@ model = keras.Sequential([
   data_augmentation,
   keras.layers.Rescaling(1./255),
 
-  keras.layers.Conv2D(32, 3, activation='relu'),
-  keras.layers.BatchNormalization(),
-  keras.layers.MaxPooling2D(),
-  keras.layers.Dropout(0.4),
-
   keras.layers.Conv2D(64, 3, activation='relu'),
-  keras.layers.BatchNormalization(),
   keras.layers.MaxPooling2D(),
-  keras.layers.Dropout(0.4),
 
   keras.layers.Conv2D(128, 3, activation='relu'),
-  keras.layers.BatchNormalization(),
   keras.layers.MaxPooling2D(),
-  keras.layers.Dropout(0.4),
+
+  keras.layers.Conv2D(256, 3, activation='relu'),
+  keras.layers.MaxPooling2D(),
+
+  keras.layers.Conv2D(512, 3, activation='relu'),
+  keras.layers.MaxPooling2D(),
+  keras.layers.Dropout(0.2),
 
   keras.layers.Flatten(),
-  keras.layers.Dense(256, activation='relu'),
+  keras.layers.Dense(32, activation='relu'),
   keras.layers.Dense(num_classes)
 ])
 
@@ -86,10 +81,10 @@ print("Fitting model...")
 history = model.fit(
   train_ds,
   validation_data=val_ds,
-  epochs=40
+  epochs=num_epochs
 )
 
-model.save('emotion_recognition_model_12.keras')
+model.save('emotion_recognition_model_14.keras')
 
 end = time.time()
 
@@ -102,7 +97,7 @@ val_acc = history.history['val_accuracy']
 loss = history.history['loss']
 val_loss = history.history['val_loss']
 
-epochs_range = range(40)
+epochs_range = range(num_epochs)
 
 plt.figure(figsize=(8, 8))
 plt.subplot(1, 2, 1)

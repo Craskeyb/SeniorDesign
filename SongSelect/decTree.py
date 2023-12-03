@@ -42,7 +42,7 @@ class decTree:
         #Implement fitting data to model using gini index as primary training criterion
         # Creating the classifier object 
         clf_gini = DecisionTreeClassifier(criterion = "gini", 
-                random_state = 100,max_depth= 5, min_samples_leaf=5) 
+                random_state = 100,max_depth= 7, min_samples_leaf=5) 
     
         # Performing training 
         clf_gini.fit(input, output)
