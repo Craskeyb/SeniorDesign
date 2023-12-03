@@ -66,7 +66,7 @@ class AiDj():
         print("\nPrediction generated in " + str(predRuntime_ms) + "ms")
 
         currentLatencies['ML'] = predRuntime_ms
-        self.genreData[prediction][0] += 1
+        self.genreData[prediction[0]][0] += 1
 
         #Evaluate the prediction using the methods found in predictionEval.py
         evalStart = time.time()
@@ -89,7 +89,7 @@ class AiDj():
         if emoteScore*100//1 > 70 and inputScore*100//1 > 40 and scenScore*100//1 > 50:
             print("Good recommendation, appending to training set")
             self.goodRecs += 1
-            self.genreData[prediction][1] += 1
+            self.genreData[prediction[0]][1] += 1
             data=data.assign(genre=[prediction[0]])
             data.to_csv('Datasets\\reinforcementTrainingData.csv', mode='a', index=False, header=False)
         else:
@@ -178,15 +178,16 @@ class AiDj():
                               '\n----------------')
         
         for genre in self.genreData.keys():
-            performanceFile.write("\n# of " + genre + 'recommendations: ' + str(self.genreData[genre][0]) + 
-                                  "\n\% of good recommendations: " + str((self.genreData[genre][1]/self.genreData[genre][0])*100//1))
+            if self.genreData[genre][0] > 0:
+                performanceFile.write("\n# of " + genre + 'recommendations: ' + str(self.genreData[genre][0]) + 
+                                    "\n\% of good recommendations: " + str((self.genreData[genre][1]/self.genreData[genre][0])*100//1))
         
         fName = 'evalData' + str(time.time()) + '.csv'
         with open(fName, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['emotion', 'input', 'scenario'])
         
-            for i in len(self.iterations):
+            for i in self.iterations:
                 writer.writerow([self.evalData['emotion'][i], self.evalData['input'][i], self.evalData['scenario'][i]])
             
         performanceFile.write("\n\nPrediction Evaluation Data" + 
@@ -210,7 +211,7 @@ if __name__ == "__main__":
                     aidj.liveAiDj()
                 except Exception as error:
                     print("Error Occurred. Try again")
-                    print("ERROR: ", error)
+                    print("ERROR: ", error, error.with_traceback)
             if aidj.songRecs.getQueueLen(aidj.prunedRecs[-1]['name']) < 3:
                 print('--------------------------------------------------')
                 # cmd = input('Press enter to process or type \'exit\' to end: ')

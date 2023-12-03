@@ -69,7 +69,7 @@ class ComputerVision:
     """
     def get_pi_data(self, image_name):
         # Raspberry Pi Socket configuration
-        TCP_IP      = '192.168.137.76'
+        TCP_IP      = '192.168.137.166'
         TCP_PORT    = 2222
         BUFFER_SIZE = 8192
         
@@ -89,7 +89,7 @@ class ComputerVision:
         inp = 'R'
         s.send(inp.encode('utf-8'))
         data = b''
-        print("Requested Data")
+        print("Requested Data...")
 
         # Receive until no packets remain
         while True:
@@ -97,7 +97,6 @@ class ComputerVision:
             if not packet:
                 break
             data += packet
-        print("Image Received")
         # Attempt to convert received data to values and image
         try:
             received_data = json.loads(data.decode('utf-8'))
@@ -192,7 +191,7 @@ class ComputerVision:
         # Calculate the motion using the two images received
         # TODO : Uncomment this # motion = computer_vision.get_motion()
         motion = self.get_motion()
-        print(motion)
+        print("Detected Motion:", motion)
 
         pi_data = {"temperature": temperature, "light": light}
 

@@ -20,7 +20,7 @@ class EmotionDetection():
     Classifies all of the images in the ComputerVision/Faces directory using the CNN model
 
     Returns:
-        
+
     """
     def classify(self):
         emotions = {}
@@ -52,6 +52,7 @@ class EmotionDetection():
             self.plot_prediction(images, oimg, score.numpy().tolist(), emotion, imgnum, num_imgs)
             imgnum += 2
         plt.show(block=False)
+        plt.savefig('emotionDetection.jpg')
         return emotions
     
     def plot_prediction(self, name, image, scores, emotion, im_num, num_images):
