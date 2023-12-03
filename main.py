@@ -6,6 +6,7 @@ import sys
 import matplotlib.pyplot as plt
 import time
 import csv
+import statistics
 
 class AiDj():
     def __init__(self):
@@ -191,9 +192,9 @@ class AiDj():
         performanceFile.write("\n\nPrediction Evaluation Data" + 
                               "\n------------------------------")
         
-        performanceFile.write("\nAverage emotion score: " + mean(self.evalData['emotion']) + 
-                              "\nAverage input score: " + mean(self.evalData['input']) + 
-                              "\nAverage scenario score: " + mean(self.evalData['scenario'])+
+        performanceFile.write("\nAverage emotion score: " + statistics.mean(self.evalData['emotion']) + 
+                              "\nAverage input score: " + statistics.mean(self.evalData['input']) + 
+                              "\nAverage scenario score: " + statistics.mean(self.evalData['scenario'])+
                               "\n\nFull prediction evaluation data can be found in " + fName)
 
 
