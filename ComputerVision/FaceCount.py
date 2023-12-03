@@ -44,7 +44,8 @@ class FaceCount:
         plt.figure("Detected Faces")
         plt.imshow(face_image, cmap='gray')
         plt.title("Faces Detected: " + str(len(faces)))
-        plt.show(block=False)
+        # plt.show(block=False)
+        plt.savefig('facesDetected.jpg')
 
         end = time.time()
 

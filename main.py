@@ -172,7 +172,7 @@ class AiDj():
                               "\nAverage latency for prediction evaluation function: " + str(avgEval/len(self.latencyTimes))+
                               "\nAverage latency for Spotify API calls: " + str(avgSpotify/len(self.latencyTimes))+
                               "\nAverage end-to-end runtime for program: " + str(avgE2E/len(self.latencyTimes))+
-                              "\n\nComplete latency data for each function can be found in " + fName)
+                              "\n\nComplete latency data for each function can be found in latencyData.csv")
 
         performanceFile.write("\n\nGenre Data"+ 
                               '\n----------------')
@@ -180,23 +180,23 @@ class AiDj():
         for genre in self.genreData.keys():
             if self.genreData[genre][0] > 0:
                 performanceFile.write("\n# of " + genre + 'recommendations: ' + str(self.genreData[genre][0]) + 
-                                    "\n\% of good recommendations: " + str((self.genreData[genre][1]/self.genreData[genre][0])*100//1))
+                                    "\n% of good recommendations: " + str((self.genreData[genre][1]/self.genreData[genre][0])*100//1))
         
         fName = 'evalData' + str(time.time()) + '.csv'
         with open(fName, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerow(['emotion', 'input', 'scenario'])
         
-            for i in self.iterations:
+            for i in range(self.iterations):
                 writer.writerow([self.evalData['emotion'][i], self.evalData['input'][i], self.evalData['scenario'][i]])
             
         performanceFile.write("\n\nPrediction Evaluation Data" + 
                               "\n------------------------------")
         
-        performanceFile.write("\nAverage emotion score: " + statistics.mean(self.evalData['emotion']) + 
-                              "\nAverage input score: " + statistics.mean(self.evalData['input']) + 
-                              "\nAverage scenario score: " + statistics.mean(self.evalData['scenario'])+
-                              "\n\nFull prediction evaluation data can be found in " + fName)
+        performanceFile.write("\nAverage emotion score: " + str(statistics.mean(self.evalData['emotion'])) + 
+                              "\nAverage input score: " + str(statistics.mean(self.evalData['input'])) + 
+                              "\nAverage scenario score: " + str(statistics.mean(self.evalData['scenario']))+
+                              "\n\nFull prediction evaluation data can be found in evalData.csv")
 
 
 

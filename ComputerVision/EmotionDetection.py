@@ -51,7 +51,7 @@ class EmotionDetection():
 
             self.plot_prediction(images, oimg, score.numpy().tolist(), emotion, imgnum, num_imgs)
             imgnum += 2
-        plt.show(block=False)
+        # plt.show(block=False)
         plt.savefig('emotionDetection.jpg')
         return emotions
     

@@ -57,7 +57,7 @@ class MotionDetection:
         plt.imshow(diff, cmap='gray')
         plt.tight_layout()
         plt.suptitle("Detected Motion:" + motionVal)
-        plt.show(block=False)
+        # plt.show(block=False)
         plt.savefig('motionDetection.jpg')
         
         return motionVal
