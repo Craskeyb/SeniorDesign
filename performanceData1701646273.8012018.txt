@@ -1,0 +1,28 @@
+Performance Data for Recent Session with Live AI DJ
+---------------------------------------------------
+Total number of predictions made: 1
+Good predictions (appended to training data): 0
+Percentage of good predictions: 0.0
+
+Latency Data (in milliseconds)
+------------------
+Average latency for Computer Vision module: 20153.66005897522
+Average latency for Machine Learning predictions: 19.37413215637207
+Average latency for prediction evaluation function: 57.64198303222656
+Average latency for Spotify API calls: 17474.39932823181
+Average end-to-end runtime for program: 51826.88403129578
+
+Complete latency data for each function can be found in latencyData.csv
+
+Genre Data
+----------------
+# of classical recommendations: 1
+% of good recommendations: 0.0
+
+Prediction Evaluation Data
+------------------------------
+Average emotion score: 0.9180952380952381
+Average input score: 0.0
+Average scenario score: 0.4835078534031414
+
+Full prediction evaluation data can be found in evalData.csv

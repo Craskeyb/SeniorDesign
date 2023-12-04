@@ -145,5 +145,6 @@ class decTree:
     def plotTree(self):
         # Plotting visualization of tree
         plt.figure(figsize=(20,10))
-        tree.plot_tree(self.giniModel)
+        genres = list(set(self.inputData['genre'].tolist()))
+        tree.plot_tree(self.giniModel, feature_names = self.cleanInput.columns.values.tolist(), class_names=genres, filled=True)
         plt.show()

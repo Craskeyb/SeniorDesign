@@ -86,7 +86,7 @@ class AiDj():
 
         #Print result of the prediction evaluation
         # if emoteScore*100//1 > 85 and inputScore*100//1 > 60 and scenScore*100//1 > 40:
-        if emoteScore*100//1 > 70 and inputScore*100//1 > 40 and scenScore*100//1 > 50:
+        if emoteScore*100//1 > 75 and inputScore*100//1 > 30 and scenScore*100//1 > 50:
             print("Good recommendation, appending to training set")
             self.goodRecs += 1
             self.genreData[prediction[0]][1] += 1
@@ -179,7 +179,7 @@ class AiDj():
         
         for genre in self.genreData.keys():
             if self.genreData[genre][0] > 0:
-                performanceFile.write("\n# of " + genre + 'recommendations: ' + str(self.genreData[genre][0]) + 
+                performanceFile.write("\n# of " + genre + ' recommendations: ' + str(self.genreData[genre][0]) + 
                                     "\n% of good recommendations: " + str((self.genreData[genre][1]/self.genreData[genre][0])*100//1))
         
         fName = 'evalData' + str(time.time()) + '.csv'
@@ -225,10 +225,10 @@ if __name__ == "__main__":
                 except Exception as error:
                     print("Error Occurred. Try again")
                     print("ERROR: ", error)
-            # aidj.decisionTree.plotTree()
             time.sleep(30)
     except KeyboardInterrupt:
         aidj.generatePerformanceData()
+        aidj.decisionTree.plotTree()
         sys.exit()
 
 

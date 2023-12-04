@@ -69,7 +69,7 @@ class ComputerVision:
     """
     def get_pi_data(self, image_name):
         # Raspberry Pi Socket configuration
-        TCP_IP      = '192.168.137.166'
+        TCP_IP      = '192.168.137.244'
         TCP_PORT    = 2222
         BUFFER_SIZE = 8192
         

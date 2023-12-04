@@ -1,8 +1,8 @@
 import csv
 import numpy as np
 import pandas as pd
-from decTree import decTree
-from testRowGenerator import rowGenerator
+#from SongSelect.decTree import decTree
+#from SongSelect.testRowGenerator import rowGenerator
 import random
 
 def refineDataset():
@@ -25,7 +25,7 @@ def refineDataset():
 
 def createDataset():
     # Define the possible values for each column
-    numrows = 10
+    numrows = 250
     genres = ['rock', 'pop', 'jazz', 'metal', 'electronic', 'classical', 'sad']
     count_values = list(range(1, 21))
     emotion_values = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
@@ -91,5 +91,5 @@ def createDataset():
                 ])
 
 if __name__ == "__main__":
-    #createDataset()
-    refineDataset()
+    createDataset()
+    #refineDataset()
